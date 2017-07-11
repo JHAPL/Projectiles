@@ -16,8 +16,8 @@ while(true)
     r = calc(picR)  
     l = calc(picL)
     q = q + 1;
-    if r(1) == 1 & l(1) == 1
-       girlz(r(2), r(3), l(2), l(3));
+    if r(1) == 1 && l(1) == 1
+       coordinateConverter(r(2), r(3), l(2), l(3))
     end
 end
 %%
