@@ -13,11 +13,11 @@ q = 0;
 while(true)
     picR = snapshot(camR);
     picL = snapshot(camL);
-    r = calc(picR)  
-    l = calc(picL)
+    r = calc(picR); 
+    l = calc(picL);
     q = q + 1;
     if r(1) == 1 && l(1) == 1
-       coordinateConverter(r(2), r(3), l(2), l(3))
+       coordinates(r(2), r(3), l(2), l(3))
     end
 end
 %%
@@ -55,3 +55,48 @@ function centerPoint = calc(ball)
      centerPoint = [foundOne, center(1), center(2)];
 end
 %%
+function  coordinates = ballfondelers(rx, ry, lx, ly)
+
+    d = 1.143 ; %distance between cameras
+
+    %centroid coordinates
+
+    %camera angles
+
+    alphaz = 10 * pi/180;
+
+    alphax = 90 * pi/180;
+
+    beta = .1276 * pi/180;
+
+    %other angles
+
+    alphal = alphax - lx * beta;
+
+    alphar = alphax + rx * beta;
+
+    %equations
+
+    m = d*sin(alphar)/sin(pi - alphal - alphar);
+
+    n = sqrt(m^2 + d^2 / 4 - m*d*cos(alphal));
+
+    theta = asin(m*sin(alphal)/n) - pi/2;
+
+    %final equations
+
+    y = n*sin(theta);
+
+    x = - abs( n*cos(theta));
+
+    xy = [x, y];
+
+    zl = abs( x*tan(alphaz + ly * beta));
+
+    zr = abs( x*tan(alphaz + ry * beta));
+
+    z = (zl + zr)/2;
+
+    coordinates = [x,y,z];
+
+end
