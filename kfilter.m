@@ -1,13 +1,25 @@
 function timeEstimate = kfilter(first, getTime, x, z, dt)
 persistent thetaLast;
 persistent pLast;
-persistent estimate;
+persistent lastEstimate;
+persistent Q R H;
 sigmaX = .5;
 sigmaZ = .5;
 
 
 if(first)
-    estimate = 1000;
+     %Process error matrix
+    Q = .001 * diag(ones(6, 1)); %For now
+    %Simulated camera error for measurements
+    
+    R = zeros(2, 2);
+    R(1, 1) = sigmaX^2;
+    R(2, 2) = sigmaZ^2;
+    
+    %Measurement matrix
+    H = [1, 0, 0, 0, 0, 0; 0, 0, 0, 1, 0, 0];
+    
+    lastEstimate = 1000;
     %Initial guesses for position, velocity, and acceleration (meters based)
     startX = x;
     startVX = 20 * cos(pi / 4);
@@ -27,17 +39,7 @@ if(first)
     pLast(5,5) = 5^2;
     pLast(6,6) = 3^2;
 else
-    %Process error matrix
-    Q = .001 * diag(ones(6, 1)); %For now
-    %Simulated camera error for measurements
-    
-    R = zeros(2, 2);
-    R(1, 1) = sigmaX^2;
-    R(2, 2) = sigmaZ^2;
-    
-    %Measurement matrix
-    H = [1, 0, 0, 0, 0, 0; 0, 0, 0, 1, 0, 0];
-    
+   
     %Get the measured values, will be changed to take camera input later
     measurement = [x ; z];
     %Kalman filter
@@ -62,9 +64,9 @@ else
     %Gets the estimate for how long until launch
     if getTime
         timeEstimate = trajectorymodel(thetaLast(1), thetaLast(4), thetaLast(2), thetaLast(5), false);
-        estimate = timeEstimate;
+        lastEstimate = timeEstimate;
     else
-        timeEstimate = estimate;
+        timeEstimate = lastEstimate;
     end
     
 end

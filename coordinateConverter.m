@@ -1,3 +1,4 @@
+tic
 d = 5; %distance between cameras
 %centroid coordinates
 cenrx = 100;
@@ -18,8 +19,9 @@ n = sqrt(m^2 + d^2 / 4 - m*d*cos(alphal));
 theta = asin(m*sin(alphal)/n) - pi/2;
 
 %final equations
-y = n*sin(theta)
-x = - abs( n*cos(theta))
+y = n*sin(theta);
+x = - abs( n*cos(theta));
 zl = abs( x*tan(alphaz + cenly * beta));
 zr = abs( x*tan(alphaz + cenry * beta));
-z = (zl + zr)/2
+z = (zl + zr)/2;
+toc
