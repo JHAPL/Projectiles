@@ -1,4 +1,4 @@
-function  coordinates = gg(rx, ry, lx, ly)
+function coor = coordinateConverter(rx, ry, lx, ly)
 
     d = 5; %distance between cameras
 
@@ -40,6 +40,6 @@ function  coordinates = gg(rx, ry, lx, ly)
 
     z = (zl + zr)/2;
 
-    coordinates = [x,y,z];
+    coor = [x,y,z];
 
 end
