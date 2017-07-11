@@ -1,10 +1,16 @@
-function paths = getPaths(time, seperation, height, vXThreat, vZThreat)
+function paths = getPaths(time, startingX, startingZ, startingVX, startingVZ)
 
 %%% ============================== Inputs ============================= %%%
-% time - .....
-% separation - ...
+% time - The times at which to get the paths of the objects
+% startingX - The initial X position of the threat (interceptor at 0,0)
+% startingZ - The initial Z position of the threat (interceptor at 0,0)
+% startingVX - The initial X velocity of the threat
+% startingVZ - The initial Z velocity of the threat
 %%% ============================= Outputs ============================= %%%
-% paths - ...
+% paths - A structure with 2 fields: interceptor and threat
+% Both are matrices of length time and width 4 of the paths 
+% The columns are vx, vz, x, z
+% Each row corresponds to a time
 
 
 %Defining variables
@@ -19,7 +25,7 @@ angleInterceptor = pi / 4;
 threatParams.mass = 1.134;
 threatParams.area = 0.05067;
 threatParams.drag = 0.47;
-threatIC = [vXThreat,vZThreat, seperation, height];
+threatIC = [startingVX,startingVZ, startingX, startingZ];
 
 %Define parameters for interceptor structure
 interceptorParams.mass = 0.0427;

@@ -1,4 +1,17 @@
 function timeEstimate = kfilter(first, getTime, x, z, dt)
+
+%%% ============================== Inputs ============================= %%%
+% first - A boolean on whether it is the first time 
+% the kalman filter is being run
+% getTime - A boolean on whether a new timeEstimate is wanted
+% x - The measured x position
+% z - The measured z position
+% dt - The amount of time between this measurment and the last one
+%%% ============================= Outputs ============================= %%%
+% timeEstimate - If getTime is true, the estimated amount of time until 
+% launch from the most recent measurement. Otherwise the last time
+% calculated.
+
 persistent thetaLast;
 persistent pLast;
 persistent lastEstimate;
