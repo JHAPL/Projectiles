@@ -1,11 +1,13 @@
 function timeEstimate = kfilter(first, getTime, x, z, dt)
 persistent thetaLast;
 persistent pLast;
+persistent estimate;
 sigmaX = .5;
 sigmaZ = .5;
 
 
 if(first)
+    estimate = 1000;
     %Initial guesses for position, velocity, and acceleration (meters based)
     startX = x;
     startVX = 20 * cos(pi / 4);
@@ -60,8 +62,9 @@ else
     %Gets the estimate for how long until launch
     if getTime
         timeEstimate = trajectorymodel(thetaLast(1), thetaLast(4), thetaLast(2), thetaLast(5), false);
+        estimate = timeEstimate;
     else
-        timeEstimate = 1000;
+        timeEstimate = estimate;
     end
     
 end
