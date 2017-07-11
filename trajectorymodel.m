@@ -1,15 +1,24 @@
-function timeTillLaunch = trajectorymodel(startingXThreat, startingZThreat, vXThreat, vZThreat, makePlots)
+function timeTillLaunch = trajectorymodel(startingX, startingZ, startingVX, startingVZ, makePlots)
 
+%%% ============================== Inputs ============================= %%%
+% time - The times at which to get the paths of the objects
+% startingX - The initial X position of the threat (interceptor at 0,0)
+% startingZ - The initial Z position of the threat (interceptor at 0,0)
+% startingVX - The initial X velocity of the threat
+% startingVZ - The initial Z velocity of the threat
+% makePlots - A boolean (true if plots are to be displayed)
+%%% ============================= Outputs ============================= %%%
+% timeTillLaunch - The amount of time until launch from the measurement
+% time. NOT accounting for process time
 
 %Time interval
 timeStep = 0.01;
 time = 0:timeStep:(10 - timeStep);
 
 %Get paths
-paths = getPaths(time, startingXThreat, startingZThreat, vXThreat, vZThreat);
+paths = getPaths(time, startingX, startingZ, startingVX, startingVZ);
 YInterceptor = paths.interceptor;
 YThreat = paths.threat;
-
 
 
 %Calculate intersections
@@ -35,11 +44,8 @@ xDifToIntersection = intersectionX - xBefore;
 ratio = xDifToIntersection / xDif;
 timeIntersectionInterceptor = time(iInterceptor) + ratio * timeStep;
 
-%Stop timing and read time
-timeElapsed = toc;
-
 %Find the time until the interceptor needs to be launched
-timeTillLaunch = timeIntersectionThreat - timeIntersectionInterceptor - timeElapsed;
+timeTillLaunch = timeIntersectionThreat - timeIntersectionInterceptor;
 
 %Plot everything
 if(makePlots)

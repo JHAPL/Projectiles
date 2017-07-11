@@ -13,14 +13,14 @@ threat(1,:) = [];
 t(:,1) = [];
 
 kfilter(true, false, -20,0,0);
-time;
+time = 0;
 for i = 1:length(t)
     x = threat(i,3)' + randn(1) * sigmaX;
     z = threat(i,4)' + randn(1) * sigmaZ;
     tic
-    time = kfilter(false, i>15,x,z,dt);
-    %toc
-    if(time < .25)
+    time = kfilter(false, mod(i, 5) == 0,x,z,dt)
+    toc
+    if(time < .4)
         break
     end
 end

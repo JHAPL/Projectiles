@@ -1,11 +1,38 @@
 function timeEstimate = kfilter(first, getTime, x, z, dt)
+
+%%% ============================== Inputs ============================= %%%
+% first - A boolean on whether it is the first time 
+% the kalman filter is being run
+% getTime - A boolean on whether a new timeEstimate is wanted
+% x - The measured x position
+% z - The measured z position
+% dt - The amount of time between this measurment and the last one
+%%% ============================= Outputs ============================= %%%
+% timeEstimate - If getTime is true, the estimated amount of time until 
+% launch from the most recent measurement. Otherwise the last time
+% calculated.
+
 persistent thetaLast;
 persistent pLast;
+persistent lastEstimate;
+persistent Q R H;
 sigmaX = .5;
 sigmaZ = .5;
 
 
 if(first)
+     %Process error matrix
+    Q = .001 * diag(ones(6, 1)); %For now
+    %Simulated camera error for measurements
+    
+    R = zeros(2, 2);
+    R(1, 1) = sigmaX^2;
+    R(2, 2) = sigmaZ^2;
+    
+    %Measurement matrix
+    H = [1, 0, 0, 0, 0, 0; 0, 0, 0, 1, 0, 0];
+    
+    lastEstimate = 1000;
     %Initial guesses for position, velocity, and acceleration (meters based)
     startX = x;
     startVX = 20 * cos(pi / 4);
@@ -25,17 +52,7 @@ if(first)
     pLast(5,5) = 5^2;
     pLast(6,6) = 3^2;
 else
-    %Process error matrix
-    Q = .001 * diag(ones(6, 1)); %For now
-    %Simulated camera error for measurements
-    
-    R = zeros(2, 2);
-    R(1, 1) = sigmaX^2;
-    R(2, 2) = sigmaZ^2;
-    
-    %Measurement matrix
-    H = [1, 0, 0, 0, 0, 0; 0, 0, 0, 1, 0, 0];
-    
+   
     %Get the measured values, will be changed to take camera input later
     measurement = [x ; z];
     %Kalman filter
@@ -60,8 +77,9 @@ else
     %Gets the estimate for how long until launch
     if getTime
         timeEstimate = trajectorymodel(thetaLast(1), thetaLast(4), thetaLast(2), thetaLast(5), false);
+        lastEstimate = timeEstimate;
     else
-        timeEstimate = 1000;
+        timeEstimate = lastEstimate;
     end
     
 end
