@@ -8,11 +8,11 @@ function coor = coordinateConverter(rx, ry, lx, ly)
 %%% ============================= Outputs ============================= %%%
 % coordinates - [x,y,z] of the threat relative to the interceptor 
 
-    d = 5; %distance between cameras
+    d = 2; %distance between cameras
     
     %camera angles
-    alphaz = 10 * pi/180;
-    alphax = 10 * pi/180;
+    alphaz = 45 * pi/180;
+    alphax = 45 * pi/180;
     beta = .1276 * pi/180;
 
     %other angles
@@ -22,13 +22,14 @@ function coor = coordinateConverter(rx, ry, lx, ly)
     %equations
     m = d*sin(alphar)/sin(pi - alphal - alphar);
     n = sqrt(m^2 + d^2 / 4 - m*d*cos(alphal));
-    theta = asin(m*sin(alphal)/n) - pi/2;
-
+    %theta = acos(m^2 - ((d^2)/4) - n^2 + n*d) - pi/2;
+    theta = asin((m * sin(alphal))/(n)) - pi/2;
+    
     %final equations
-    y = n*sin(theta);
+    y = - n*sin(theta);
     x = - abs( n*cos(theta));
-    zl = abs( x*tan(alphaz + ly * beta));
-    zr = abs( x*tan(alphaz + ry * beta));
+    zl = abs( sqrt(x^2 + ((d/2)-y)^2) * tan(alphaz + ly * beta));
+    zr = abs( sqrt(x^2 + ((d/2)+y)^2) * tan(alphaz + ry * beta));
     z = (zl + zr)/2;
     
     coor = [x,y,z];
