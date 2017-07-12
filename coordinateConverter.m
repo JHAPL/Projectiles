@@ -21,13 +21,13 @@ function coor = coordinateConverter(rx, ry, lx, ly)
 
     %equations
     m = d*sin(alphar)/sin(pi - alphal - alphar);
-    n = sqrt(m^2 + d^2 / 4 - m*d*cos(alphal));
+    %n = sqrt(m^2 + d^2 / 4 - m*d*cos(alphal));
     %theta = acos(m^2 - ((d^2)/4) - n^2 + n*d) - pi/2;
-    theta = asin((m * sin(alphal))/(n)) + pi/2;
+    %theta = asin((m * sin(alphal))/(n)) - pi/2;
     
     %final equations
-    y = n*sin(theta);
-    x = n*cos(theta);
+    y = m*sin(alphal)- d/2;
+    x = -abs(m*cos(alphal));
     zl = abs( sqrt(x^2 + ((d/2) + y)^2) * tan(alphaz + ly * beta));
     zr = abs( sqrt(x^2 + ((d/2) - y)^2) * tan(alphaz + ry * beta));
     z = (zl + zr)/2;
