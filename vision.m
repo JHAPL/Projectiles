@@ -13,8 +13,8 @@ q = 0;
 while(true)
     picR = snapshot(camR);
     picL = snapshot(camL);
-    r = calc(picR)
-    l = calc(picL)
+    r = calc(picR);
+    l = calc(picL);
     q = q + 1;
     if r(1) == 1 && l(1) == 1
        %coordinateConverter(r(2), r(3), l(2), l(3))
@@ -24,8 +24,10 @@ end
 function centerPoint = calc(ball)
     
     red = double(ball(:,:,1)); green = double(ball(:,:,2)); blue = double(ball(:,:,3));
-
-    out = red./(green)>2.5 & red./(blue)>2.5 & red>20;
+    rtg = 2.5; 
+    rtb = 2.5;
+    darktresh = 20;
+    out = red./(green)>rtg & red./(blue)>rtb & red>darktresh;
     
     out = imfill(out,'holes');
     out = bwmorph(out,'dilate',3);
