@@ -26,6 +26,11 @@ YThreat = paths.threat;
 
 %Calculate intersections
 [intersectionX, intersectionY] = intersections(YInterceptor(:, 3), YInterceptor(:, 4), YThreat(:, 3), YThreat(:, 4));
+if(isempty(intersectionX)) 
+    timeTillLaunch = 1000;
+    return;
+end
+
 intersectionX = intersectionX(length(intersectionX));
 intersectionY = intersectionY(length(intersectionY));
 %TODO Deal with when there is no intersection or when the only intersection
