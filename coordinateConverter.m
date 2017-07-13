@@ -8,11 +8,11 @@ function coor = coordinateConverter(rx, ry, lx, ly)
 %%% ============================= Outputs ============================= %%%
 % coordinates - [x,y,z] of the threat relative to the interceptor 
 
-    d = 2; %distance between cameras
+    d = 1.14; %distance between cameras
     
     %camera angles
-    alphaz = 45 * pi/180;
-    alphax = 45 * pi/180;
+    alphaz = 5 * pi/180;
+    alphax = 20 * pi/180;
     beta = .1276 * pi/180;
 
     %other angles
