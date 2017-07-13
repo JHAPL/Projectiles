@@ -17,14 +17,16 @@ while(true)
     l = calc(picL)
     q = q + 1;
     if r(1) == 1 && l(1) == 1
-       coordinateConverter(r(2), r(3), l(2), l(3))
-       disp('1')
+       %coordinateConverter(r(2), r(3), l(2), l(3))
     end
 end
 %%
 function centerPoint = calc(ball)
-    red = ball(:,:,1); green = ball(:,:,2); blue = ball(:,:,3);
-    out = red./(green)>1.9 & red./(blue)>1.9; 
+    
+    red = double(ball(:,:,1)); green = double(ball(:,:,2)); blue = double(ball(:,:,3));
+
+    out = red./(green)>2.5 & red./(blue)>2.5 & red>20;
+    
     out = imfill(out,'holes');
     out = bwmorph(out,'dilate',3);
     out = imfill(out,'holes');
