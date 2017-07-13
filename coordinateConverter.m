@@ -29,7 +29,7 @@ function coor = coordinateConverter(rx, ry, lx, ly)
     y = m*sin(alphal)- d/2;
     x = -abs(m*cos(alphal));
     zl = abs( sqrt(x^2 + ((d/2) + y)^2) * tan(alphaz + ly * beta));
-    zr = abs( sqrt(x^2 + ((d/2) + y)^2) * tan(alphaz + ry * beta));
+    zr = abs( sqrt(x^2 + ((d/2) - y)^2) * tan(alphaz + ry * beta));
     z = (zl + zr)/2;
     
     coor = [x,y,z];
