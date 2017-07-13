@@ -14,12 +14,8 @@ function paths = getPaths(time, startingX, startingZ, startingVX, startingVZ)
 
 
 %Defining variables
-%voThreat = 20;
-%angleThreat =  pi / 4 ;
-voInterceptor = 45;
+voInterceptor = 20;
 angleInterceptor = pi / 4;
-%seperation = 25;
-
 
 %Define parameters for threat structure
 threatParams.mass = 1.134;

@@ -19,11 +19,17 @@ time = 0:timeStep:(10 - timeStep);
 paths = getPaths(time, startingX, startingZ, startingVX, startingVZ);
 YInterceptor = paths.interceptor;
 YThreat = paths.threat;
+%plot(YInterceptor(:,3), YInterceptor(:,4), 'b');
+%hold on;
+%plot(YThreat(:,3), YThreat(:,4), 'r');
 
 
 %Calculate intersections
 [intersectionX, intersectionY] = intersections(YInterceptor(:, 3), YInterceptor(:, 4), YThreat(:, 3), YThreat(:, 4));
-
+intersectionX = intersectionX(length(intersectionX));
+intersectionY = intersectionY(length(intersectionY));
+%TODO Deal with when there is no intersection or when the only intersection
+%is on the upswing
 
 %Iterator through the paths
 %Finds the index of the first x greater than the intersection point
@@ -47,6 +53,7 @@ timeIntersectionInterceptor = time(iInterceptor) + ratio * timeStep;
 %Find the time until the interceptor needs to be launched
 timeTillLaunch = timeIntersectionThreat - timeIntersectionInterceptor;
 
+%TODO Clean up plots and other stuff
 %Plot everything
 if(makePlots)
     plot(YInterceptor(1:iInterceptor,3), YInterceptor(1:iInterceptor,4), 'b');
@@ -58,8 +65,8 @@ if(makePlots)
     plot(intersectionX, intersectionY, '-*k');
     
     %Set plot limits
-    xlim([-30, 70]);
-    ylim([.1, 40]);
+    xlim([-40, 0]);
+    ylim([.1, 30]);
     title('Kickball ICBM VS. Raquetball SAM');
     xlabel('X Position in Meters');
     ylabel('Y Position in Meters');
