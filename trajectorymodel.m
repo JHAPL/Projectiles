@@ -48,7 +48,10 @@ xDifToIntersection = intersectionX - xBefore;
 ratio = xDifToIntersection / xDif;
 timeIntersectionThreat = time(iThreat) + ratio * timeStep;
 
-iInterceptor = find(YInterceptor(:, 3) > intersectionX, 1);
+%Depends on initial direction of interceptor
+setGlobal();
+global initialVXInterceptor;
+iInterceptor = find(sign(YInterceptor(:, 3)- intersectionX) == sign(initialVXInterceptor), 1);
 xBefore = YInterceptor(iInterceptor - 1, 3);
 xAfter = YInterceptor(iInterceptor, 3);
 xDif = xAfter - xBefore;

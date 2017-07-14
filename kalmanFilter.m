@@ -1,16 +1,16 @@
 %Initial guesses for position, velocity, and acceleration (meters based)
-startX = -20;
-startVX = 10;
+startX = -25;
+startVX = 7.5;
 startAX = 0;
 startZ = 0;
-startVZ = 20;
+startVZ = 15;
 startAZ = -9.8;
 sigmaX = 0.5;
 sigmaZ = 0.5;
 %Create a matrix to represent all initial values
 thetaLast = [startX; startVX; startAX; startZ; startVZ; startAZ];
 
-cutoffTime = 0.4;
+cutoffTime = 0.2;
 
 %Initial variance matrix
 pLast = zeros(6, 6);
