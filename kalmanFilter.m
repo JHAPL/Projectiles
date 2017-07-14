@@ -90,7 +90,7 @@ for i = 1:length(t)
     % thetaLast
 
     predictedTime = trajectorymodel(thetaLast(1), thetaLast(4), thetaLast(2), thetaLast(5), nextTime)
-    actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), false);
+    actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), false)
     threat(i,:);
     if(nextTime)
         break;

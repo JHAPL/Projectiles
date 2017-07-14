@@ -6,14 +6,17 @@ sigmaX = 0.5;
 sigmaZ = 0.5;
 
 %TODO: Something is wrong here
+%This is worse than kalmanFilter
+
+%TODO Make folders
 
 %find the ideal paths of the target and interceptor (only target is used)
-path = getPaths(t, -20, 0, 7.5, 15);
+path = getPaths(t, -25, 0, 7.5, 15);
 threat = path.threat;
 threat(1,:) = [];
 t(:,1) = [];
 
-kfilter(true, false, -20,0,0);
+kfilter(true, false, -25,0,0);
 time = 0;
 tic
 for i = 1:length(t)
