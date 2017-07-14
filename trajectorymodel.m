@@ -20,14 +20,14 @@ paths = getPaths(time, startingX, startingZ, startingVX, startingVZ);
 YInterceptor = paths.interceptor;
 YThreat = paths.threat;
 if(makePlots)
-plot(YInterceptor(:,3), YInterceptor(:,4), 'b');
-hold on;
-plot(YThreat(:,3), YThreat(:,4), 'r');
+    plot(YInterceptor(:,3), YInterceptor(:,4), 'b');
+    hold on;
+    plot(YThreat(:,3), YThreat(:,4), 'r');
 end
 
 %Calculate intersections
 [intersectionX, intersectionY] = intersections(YInterceptor(:, 3), YInterceptor(:, 4), YThreat(:, 3), YThreat(:, 4));
-if(isempty(intersectionX)) 
+if(isempty(intersectionX))
     timeTillLaunch = 1000;
     return;
 end
@@ -48,7 +48,7 @@ xDifToIntersection = intersectionX - xBefore;
 ratio = xDifToIntersection / xDif;
 timeIntersectionThreat = time(iThreat) + ratio * timeStep;
 
-iInterceptor = find(YInterceptor(:, 3) < intersectionX, 1);
+iInterceptor = find(YInterceptor(:, 3) > intersectionX, 1);
 xBefore = YInterceptor(iInterceptor - 1, 3);
 xAfter = YInterceptor(iInterceptor, 3);
 xDif = xAfter - xBefore;

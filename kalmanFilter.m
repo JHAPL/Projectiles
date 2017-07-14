@@ -1,5 +1,5 @@
 %Initial guesses for position, velocity, and acceleration (meters based)
-startX = -35;
+startX = -20;
 startVX = 10;
 startAX = 0;
 startZ = 0;
@@ -89,7 +89,8 @@ for i = 1:length(t)
     xVel_filtered(i) = thetaLast(2);
     % thetaLast
 
-    predictedTime = trajectorymodel(thetaLast(1), thetaLast(4), thetaLast(2), thetaLast(5), nextTime);
+    predictedTime = trajectorymodel(thetaLast(1), thetaLast(4), thetaLast(2), thetaLast(5), nextTime)
+    actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), false);
     threat(i,:);
     if(nextTime)
         break;
@@ -109,7 +110,7 @@ hold on
 plot(x_truth,z_truth,'-g','linewidth',1)
 %plot(x_filtered,z_filtered,'-*r','linewidth',2)
 legend('Interceptor','Projected Threat')
-
+xlim([-40,40]);
 %TODO: See where threat is actually at interception (graph a circle or
 %something)
 

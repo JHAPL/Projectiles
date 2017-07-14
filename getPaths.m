@@ -27,7 +27,7 @@ threatIC = [startingVX,startingVZ, startingX, startingZ];
 interceptorParams.mass = 0.0427;
 interceptorParams.area = 0.0025652;
 interceptorParams.drag = 0.47;
-interceptorIC = [-voInterceptor * cos(angleInterceptor),voInterceptor * sin(angleInterceptor),0,0];
+interceptorIC = [voInterceptor * cos(angleInterceptor),voInterceptor * sin(angleInterceptor),0,0];
 
 %Differential equations solver calculates the X velocities, Z velocities,
 %X position, and Z position. Stored in an array 'Y'
