@@ -22,7 +22,7 @@ sigmaZ = .5;
 
 if(first)
      %Process error matrix
-    Q = .001 * diag(ones(6, 1)); %For now
+    Q = .01 * diag(ones(6, 1)); %For now
     %Simulated camera error for measurements
     
     R = zeros(2, 2);
@@ -35,10 +35,10 @@ if(first)
     lastEstimate = 1000;
     %Initial guesses for position, velocity, and acceleration (meters based)
     startX = x;
-    startVX = 20 * cos(pi / 4);
+    startVX = 10;
     startAX = 0;
     startZ = z;
-    startVZ = 20 * cos(pi / 4);
+    startVZ = 20;
     startAZ = -9.8;
     %Create a matrix to represent all initial values
     thetaLast = [startX; startVX; startAX; startZ; startVZ; startAZ];

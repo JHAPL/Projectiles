@@ -19,10 +19,11 @@ time = 0:timeStep:(10 - timeStep);
 paths = getPaths(time, startingX, startingZ, startingVX, startingVZ);
 YInterceptor = paths.interceptor;
 YThreat = paths.threat;
-%plot(YInterceptor(:,3), YInterceptor(:,4), 'b');
-%hold on;
-%plot(YThreat(:,3), YThreat(:,4), 'r');
-
+if(makePlots)
+plot(YInterceptor(:,3), YInterceptor(:,4), 'b');
+hold on;
+plot(YThreat(:,3), YThreat(:,4), 'r');
+end
 
 %Calculate intersections
 [intersectionX, intersectionY] = intersections(YInterceptor(:, 3), YInterceptor(:, 4), YThreat(:, 3), YThreat(:, 4));

@@ -10,7 +10,7 @@ sigmaZ = 0.5;
 %Create a matrix to represent all initial values
 thetaLast = [startX; startVX; startAX; startZ; startVZ; startAZ];
 
-cutoffTime = 0.1;
+cutoffTime = 0.4;
 
 %Initial variance matrix
 pLast = zeros(6, 6);
@@ -90,6 +90,7 @@ for i = 1:length(t)
     % thetaLast
 
     predictedTime = trajectorymodel(thetaLast(1), thetaLast(4), thetaLast(2), thetaLast(5), nextTime);
+    threat(i,:);
     if(nextTime)
         break;
     end

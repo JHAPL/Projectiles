@@ -19,8 +19,9 @@ tic
 for i = 1:length(t)
     x = threat(i,3)' + randn(1) * sigmaX;
     z = threat(i,4)' + randn(1) * sigmaZ;
-    time = kfilter(false, mod(i, 5) == 0,x,z,dt)
+    time = kfilter(false, mod(i, 5) == 1,x,z,dt)
     if(time < .4)
+        actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), true)
         break
     end
 end
