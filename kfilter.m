@@ -16,8 +16,10 @@ persistent thetaLast;
 persistent pLast;
 persistent lastEstimate;
 persistent Q R H;
-sigmaX = .5;
-sigmaZ = .5;
+
+setGlobal();
+global sigmaX sigmaZ;
+global initialVXThreat initialVZThreat;
 
 
 if(first)
@@ -32,8 +34,6 @@ if(first)
     %Measurement matrix
     H = [1, 0, 0, 0, 0, 0; 0, 0, 0, 1, 0, 0];
     
-    setGlobal();
-    global initialVXThreat initialVZThreat;
     
     lastEstimate = 1000; %TODO change this
     %Initial guesses for position, velocity, and acceleration (meters based)

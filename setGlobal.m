@@ -11,6 +11,9 @@ initialZInterceptor = 0;
 initialVXInterceptor = -20 * sin(45);
 initialVZInterceptor = 20 * cos(45);
 
+global sigmaX sigmaZ;
+sigmaX = 0.1; %When you change this change Q as well. 
+sigmaZ = 0.1;
 
 end
 
