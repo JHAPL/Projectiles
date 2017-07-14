@@ -1,12 +1,10 @@
 %Change in time (represents ideal frames/second and update rate)
-dt = 1/30;
+dt = 1/25;
 %Total time
 t = 0:dt:5;
-sigmaX = 0.5;
-sigmaZ = 0.5;
+sigmaX = 0.1;
+sigmaZ = 0.1;
 
-%TODO: Something is wrong here
-%This is worse than kalmanFilter
 
 %TODO Make folders
 setGlobal();
@@ -26,7 +24,9 @@ tic
 for i = 1:length(t)
     x = threat(i,3)' + randn(1) * sigmaX;
     z = threat(i,4)' + randn(1) * sigmaZ;
-    time = kfilter(false, mod(i, 5) == 1,x,z,dt)
+    tic
+    time = kfilter(false, mod(i, 5) == 1,x,z,dt);
+    toc
     if(time < .4)
         actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), true)
         break

@@ -1,8 +1,8 @@
 setGlobal();
 global initialXThreat initialZThreat initialVXThreat initialVZThreat;
 
-sigmaX = 0.1;
-sigmaZ = 0.1;
+sigmaX = 0.5;
+sigmaZ = 0.5;
 %Create a matrix to represent all initial values
 %Initial guesses for position, velocity, and acceleration (meters based)
 thetaLast = [initialXThreat; initialVXThreat; 0; initialZThreat; initialVZThreat; -9.8];
@@ -86,8 +86,8 @@ for i = 1:length(t)
     xVel_filtered(i) = thetaLast(2);
     % thetaLast
 
-    predictedTime = trajectorymodel(thetaLast(1), thetaLast(4), thetaLast(2), thetaLast(5), nextTime)
-    actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), false)
+    predictedTime = trajectorymodel(thetaLast(1), thetaLast(4), thetaLast(2), thetaLast(5), nextTime);
+    actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), false);
     %threat(i,:)
     %thetaLast
     if(nextTime)
