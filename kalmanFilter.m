@@ -1,14 +1,11 @@
-%Initial guesses for position, velocity, and acceleration (meters based)
-startX = -25;
-startVX = 7.5;
-startAX = 0;
-startZ = 0;
-startVZ = 15;
-startAZ = -9.8;
-sigmaX = 0.5;
-sigmaZ = 0.5;
+setGlobal();
+global initialXThreat initialZThreat initialVXThreat initialVZThreat;
+
+sigmaX = 0.1;
+sigmaZ = 0.1;
 %Create a matrix to represent all initial values
-thetaLast = [startX; startVX; startAX; startZ; startVZ; startAZ];
+%Initial guesses for position, velocity, and acceleration (meters based)
+thetaLast = [initialXThreat; initialVXThreat; 0; initialZThreat; initialVZThreat; -9.8];
 
 cutoffTime = 0.2;
 
@@ -34,14 +31,14 @@ R(2, 2) = sigmaZ^2;
 H = [1, 0, 0, 0, 0, 0; 0, 0, 0, 1, 0, 0];
 
 %Change in time (represents ideal frames/second and update rate)
-dt = 1/30;
+dt = 1/25;
 %Total time
 t = 0:dt:5;
 
 nextTime = false;
 
 %find the ideal paths of the target and interceptor (only target is used)
-path = getPaths(t, startX, startZ, startVX, startVZ);
+path = getPaths(t, initialXThreat, initialZThreat, initialVXThreat, initialVZThreat);
 threat = path.threat;
 threat(1,:) = [];
 
@@ -91,7 +88,8 @@ for i = 1:length(t)
 
     predictedTime = trajectorymodel(thetaLast(1), thetaLast(4), thetaLast(2), thetaLast(5), nextTime)
     actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), false)
-    threat(i,:);
+    %threat(i,:)
+    %thetaLast
     if(nextTime)
         break;
     end

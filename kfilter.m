@@ -32,14 +32,16 @@ if(first)
     %Measurement matrix
     H = [1, 0, 0, 0, 0, 0; 0, 0, 0, 1, 0, 0];
     
-    %TODO: Make these passed in
+    setGlobal();
+    global initialVXThreat initialVZThreat;
+    
     lastEstimate = 1000; %TODO change this
     %Initial guesses for position, velocity, and acceleration (meters based)
     startX = x;
-    startVX = 7.5;
+    startVX = initialVXThreat;
     startAX = 0;
     startZ = z;
-    startVZ = 15;
+    startVZ = initialVZThreat;
     startAZ = -9.8;
     %Create a matrix to represent all initial values
     thetaLast = [startX; startVX; startAX; startZ; startVZ; startAZ];

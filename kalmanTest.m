@@ -1,7 +1,7 @@
 %Change in time (represents ideal frames/second and update rate)
 dt = 1/30;
 %Total time
-t = 0:dt:3;
+t = 0:dt:5;
 sigmaX = 0.5;
 sigmaZ = 0.5;
 
@@ -9,14 +9,18 @@ sigmaZ = 0.5;
 %This is worse than kalmanFilter
 
 %TODO Make folders
+setGlobal();
+global initialXThreat initialZThreat initialVXThreat initialVZThreat;
+
+
 
 %find the ideal paths of the target and interceptor (only target is used)
-path = getPaths(t, -25, 0, 7.5, 15);
+path = getPaths(t, initialXThreat, initialZThreat, initialVXThreat, initialVZThreat);
 threat = path.threat;
 threat(1,:) = [];
 t(:,1) = [];
 
-kfilter(true, false, -25,0,0);
+kfilter(true, false, initialXThreat,initialZThreat,0);
 time = 0;
 tic
 for i = 1:length(t)
