@@ -1,12 +1,12 @@
 setGlobal();
 global initialXThreat initialZThreat initialVXThreat initialVZThreat;
 global sigmaX sigmaZ;
+global timeThreshhold;
 
 %Create a matrix to represent all initial values
 %Initial guesses for position, velocity, and acceleration (meters based)
 thetaLast = [initialXThreat; initialVXThreat; 0; initialZThreat; initialVZThreat; -9.8];
 
-cutoffTime = 0.2;
 
 %Initial variance matrix
 pLast = zeros(6, 6);
@@ -92,7 +92,7 @@ for i = 1:length(t)
     if(nextTime)
         break;
     end
-    nextTime = (predictedTime < cutoffTime);
+    nextTime = (predictedTime < timeThreshhold);
 end
 
 %Find the true trajectory of the target
