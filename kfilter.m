@@ -7,9 +7,9 @@ function estimate = kfilter(first, x, z, dt)
 % z - The measured z position
 % dt - The amount of time between this measurment and the last one
 %%% ============================= Outputs ============================= %%%
-% estimate - TODO: FIX the estimated amount of time until 
-% launch from the most recent measurement. Otherwise the last time
-% calculated.
+% estimate - A structure containing 2 fields: time, the estimated amount of time until 
+% launch from the most recent measurement, and theta, the array containing
+% the current estimate of the state (x, Vx, Ax, z, Vz, Az).
 
 persistent thetaLast;
 persistent pLast;
@@ -22,7 +22,7 @@ global initialVXThreat initialVZThreat;
 
 if(first)
      %Process error matrix
-    Q = .01 * diag(ones(6, 1)); %For now
+    Q = .1 * diag(ones(6, 1)); %For now
     %Simulated camera error for measurements
     
     R = zeros(2, 2);
