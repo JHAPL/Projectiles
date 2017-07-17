@@ -19,7 +19,7 @@ pLast(5,5) = 5^2;
 pLast(6,6) = 3^2;
 
 %Process error matrix
-Q = .01 * diag(ones(6, 1)); %For now. Change this depending on sigma
+Q = .1 * diag(ones(6, 1)); %For now. Change this depending on sigma
 %Simulated camera error for measurements
 
 R = zeros(2, 2);
