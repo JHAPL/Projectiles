@@ -13,13 +13,6 @@ function paths = getPaths(time, startingX, startingZ, startingVX, startingVZ)
 % Each row corresponds to a time
 
 
-%Defining variables
-%voThreat = 20;
-%angleThreat =  pi / 4 ;
-voInterceptor = 45;
-angleInterceptor = pi / 4;
-%seperation = 25;
-
 
 %Define parameters for threat structure
 threatParams.mass = 1.134;
@@ -31,7 +24,10 @@ threatIC = [startingVX,startingVZ, startingX, startingZ];
 interceptorParams.mass = 0.0427;
 interceptorParams.area = 0.0025652;
 interceptorParams.drag = 0.47;
-interceptorIC = [-voInterceptor * cos(angleInterceptor),voInterceptor * sin(angleInterceptor),0,0];
+
+setGlobal();
+global initialXInterceptor initialZInterceptor initialVXInterceptor initialVZInterceptor;
+interceptorIC = [initialVXInterceptor,initialVZInterceptor,initialXInterceptor,initialZInterceptor];
 
 %Differential equations solver calculates the X velocities, Z velocities,
 %X position, and Z position. Stored in an array 'Y'
