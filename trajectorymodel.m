@@ -13,7 +13,7 @@ function timeTillLaunch = trajectorymodel(startingX, startingZ, startingVX, star
 
 %Time interval
 timeStep = 0.01;
-time = 0:timeStep:(10 - timeStep);
+time = 0:timeStep:(5 - timeStep);
 
 %Get paths
 paths = getPaths(time, startingX, startingZ, startingVX, startingVZ);
@@ -28,7 +28,7 @@ end
 %Calculate intersections
 [intersectionX, intersectionY] = intersections(YInterceptor(:, 3), YInterceptor(:, 4), YThreat(:, 3), YThreat(:, 4));
 if(isempty(intersectionX))
-    timeTillLaunch = 1000;
+    timeTillLaunch = Inf;
     return;
 end
 
