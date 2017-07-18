@@ -1,20 +1,18 @@
-function timeEstimate = kfilter(first, getTime, x, z, dt)
+function estimate = kfilter(first, x, z, dt)
 
 %%% ============================== Inputs ============================= %%%
 % first - A boolean on whether it is the first time 
 % the kalman filter is being run
-% getTime - A boolean on whether a new timeEstimate is wanted
 % x - The measured x position
 % z - The measured z position
 % dt - The amount of time between this measurment and the last one
 %%% ============================= Outputs ============================= %%%
-% timeEstimate - If getTime is true, the estimated amount of time until 
-% launch from the most recent measurement. Otherwise the last time
-% calculated.
+% estimate - A structure containing 2 fields: time, the estimated amount of time until 
+% launch from the most recent measurement, and theta, the array containing
+% the current estimate of the state (x, Vx, Ax, z, Vz, Az).
 
 persistent thetaLast;
 persistent pLast;
-persistent lastEstimate;
 persistent Q R H;
 
 setGlobal();
@@ -24,7 +22,7 @@ global initialVXThreat initialVZThreat;
 
 if(first)
      %Process error matrix
-    Q = .01 * diag(ones(6, 1)); %For now
+    Q = .1 * diag(ones(6, 1)); %For now
     %Simulated camera error for measurements
     
     R = zeros(2, 2);
@@ -35,7 +33,6 @@ if(first)
     H = [1, 0, 0, 0, 0, 0; 0, 0, 0, 1, 0, 0];
     
     
-    lastEstimate = 1000; %TODO change this
     %Initial guesses for position, velocity, and acceleration (meters based)
     startX = x;
     startVX = initialVXThreat;
@@ -54,6 +51,10 @@ if(first)
     pLast(4,4) = sigmaZ^2;
     pLast(5,5) = 5^2;
     pLast(6,6) = 3^2;
+    
+    estimate.time = Inf;
+    estimate.theta = thetaLast;
+
 else
    
     %Get the measured values, will be changed to take camera input later
@@ -76,18 +77,55 @@ else
     thetaLast = thetaPrediction + K * residual;
     %Find new predicted covariance values
     pLast = (eye(6) - K*H)*pPrediction;
-    %thetaLast
+    
     %Gets the estimate for how long until launch
-    if getTime
-        timeEstimate = trajectorymodel(thetaLast(1), thetaLast(4), thetaLast(2), thetaLast(5), false);
-        lastEstimate = timeEstimate;
-    else
-        timeEstimate = lastEstimate;
-    end
+    estimate.theta = thetaLast;
+    estimate.time = getTimeEstimate(thetaLast);
     
 end
 end
 
+
+function time = getTimeEstimate(theta)
+global initialXInterceptor initialZInterceptor initialVXInterceptor initialVZInterceptor;
+g = 9.8;
+xThreat = theta(1);
+zThreat = theta(4);
+vXThreat = theta(2);
+vZThreat = theta(5);
+
+a = vXThreat;
+b = xThreat;
+c = -g / 2;
+d = vZThreat;
+e = zThreat;
+
+
+aThreat = c / a / a;
+bThreat = d / a - 2 * b * c / a / a;
+cThreat = c * b * b / a / a - d * b / a + e;
+
+a = initialVXInterceptor;
+b = initialXInterceptor;
+c = -g / 2;
+d = initialVZInterceptor;
+e = initialZInterceptor;
+
+aInterceptor = c / a / a;
+bInterceptor = d / a - 2 * b * c / a / a;
+cInterceptor = c * b * b / a / a - d * b / a + e;
+
+a = aThreat - aInterceptor;
+b = bThreat - bInterceptor;
+c = cThreat - cInterceptor;
+
+
+xCollision = (-b - sqrt(b * b - 4 * a * c)) / 2 / a;
+tThreat = (xCollision - xThreat) / vXThreat;
+tInterceptor = (xCollision - initialXInterceptor) / initialVXInterceptor;
+time = tThreat - tInterceptor;
+
+end
 %This method retrieves the state transformation matrix for given time
 %difference
 function F = getFMatrix(dt)
