@@ -2,6 +2,7 @@ setGlobal();
 global initialXThreat initialZThreat initialVXThreat initialVZThreat;
 global sigmaX sigmaZ;
 global timeThreshhold;
+global Q;
 
 %Create a matrix to represent all initial values
 %Initial guesses for position, velocity, and acceleration (meters based)
@@ -18,8 +19,6 @@ pLast(4,4) = sigmaZ^2;
 pLast(5,5) = 5^2;
 pLast(6,6) = 3^2;
 
-%Process error matrix
-Q = .1 * diag(ones(6, 1)); %For now. Change this depending on sigma
 %Simulated camera error for measurements
 
 R = zeros(2, 2);

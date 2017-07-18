@@ -10,7 +10,7 @@ dt = 1/25;
 t = 0:dt:5;
 
 
-%TODO Make folders
+%TODO: Make folders
 %TODO: ESTIMATE DRAG COEEFICIANTS
 
 
@@ -30,11 +30,38 @@ for i = 1:length(t)
     estimate = kfilter(false,x,z,dt);
     time = estimate.time;
     theta = estimate.theta;
-    theta;
+    
+    
+    %Its velocity thats the problem
     if(time < timeThreshhold)
+        
         projectedTime = trajectorymodel(theta(1), theta(4), theta(2), theta(5),true);
         actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), true);
-        abs(projectedTime - actualTime)
+       % projectedTime = actualTime;
+        
+        %Find the paramaters of the threat when the interceptor is
+        %projected to launch
+        lastKnownI = fix(projectedTime / dt) + i;
+        lastKnownTime = fix(projectedTime / dt) * dt;
+        tInterval = 0:0.001:projectedTime - lastKnownTime;
+        tInterval(length(tInterval)+1) = projectedTime;
+        paths = getPaths(tInterval, threat(i,3), threat(i,4), threat(i,1), threat(i,2));
+        launchDetails = paths.threat(length(paths.threat), :);
+        
+        
+        %Check if they would actually intersect
+        tInterval = 0:0.001:10;
+        paths = getPaths(tInterval, launchDetails(3), launchDetails(4), launchDetails(1), launchDetails(2));
+        minDistance = Inf;
+        for j = 1:length(tInterval)
+            distance = sqrt((paths.threat(j,3)-paths.interceptor(j,3))^2 + ...
+            (paths.threat(j,4)-paths.interceptor(j,4))^2); 
+            if(distance < minDistance)
+                minDistance = distance;
+            end
+        end
+        minDistance
+        
         break
     end
 
