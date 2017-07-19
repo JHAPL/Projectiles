@@ -101,13 +101,14 @@ x_truth = m_truth(1, :);
 z_truth = m_truth(2, :);
 
 %Plot everything
-% figure
+figure
 plot(x_measured,z_measured,'bo')
 hold on
 plot(x_truth,z_truth,'-g','linewidth',1)
-%plot(x_filtered,z_filtered,'-*r','linewidth',2)
+plot(x_filtered,z_filtered,'-*r','linewidth',2)
 legend('Interceptor','Projected Threat')
 xlim([-40,40]);
+ylim([0, 20]);
 %TODO: See where threat is actually at interception (graph a circle or
 %something)
 
@@ -133,3 +134,4 @@ z = f(i,4)' + randn(size(i)) * sigmaZ;
 m = [x; z];
 
 end
+
