@@ -1,6 +1,7 @@
 clear;
 clc;
 tic;
+setup();
 
 
 %angles in radians
