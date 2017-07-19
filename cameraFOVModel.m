@@ -221,5 +221,3 @@ xlabel('X axis');
 ylabel('Y axis');
 zlabel('Height in meters');
 title('Camera FOV Model');
-
-
