@@ -12,7 +12,7 @@ loop = false;
 
 for a = 1:1000
     
-    %Change in time (represents ideal frames/second and update rate)
+    %Change in time between pictures (represents ideal frames/second and update rate)
     dt = 1/25;
     %Total time
     t = 0:dt:5;
@@ -20,7 +20,6 @@ for a = 1:1000
     
     %TODO: Make folders
     %TODO: ESTIMATE DRAG COEEFICIANTS
-    %TODO: Remove half of the path generation code (do it once)
     
     
     %find the ideal paths of the target and interceptor (only target is used)

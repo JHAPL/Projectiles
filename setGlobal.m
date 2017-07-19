@@ -13,9 +13,9 @@ initialVZInterceptor = 15 * cos(pi/4);
 
 %Process error matrix
 global sigmaX sigmaZ Q;
-sigmaX = 0.5; %When you change this change Q as well. Actually not sure of this
-sigmaZ = 0.5;
-Q = 0.001 * diag(ones(6, 1));
+sigmaX = .4; %When you change this change Q as well. Actually not sure of this
+sigmaZ = .4;
+Q =  .01 * diag(ones(6, 1)); %.01 a good value for 0.5/0.4
 
 %If estimated time until launch is less than this, stop camera measurments
 %and commence better estimates and launch
