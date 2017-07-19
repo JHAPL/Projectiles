@@ -1,9 +1,14 @@
+function f = trajectory(t, Y, parameters)
+
+%%% ============================== Inputs ============================= %%%
+% t - t is the time paramater, unused because the force is time invariant 
+% Y - The variables to differentiate with respect to time
+% parameters - The parameters of the object (mass, drag, area)
+%%% ============================= Outputs ============================= %%%
+% f - The derivatives of the Y variables
 %A set of differential equations that describes the forces
 %on the particle at any given point and velocity
-%t is the time paramater, unused because the force is time invariant
-%Y represents the variables to differentiate with respect to time
-%The parameters define the parameters of the object (mass, drag, area)
-function f = trajectory(t, Y, parameters)
+
 
 %parameters is a structure that contains the fields below
 mass = parameters.mass;

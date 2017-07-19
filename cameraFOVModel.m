@@ -31,9 +31,8 @@ width=2.44;
 
 
 %Get paths
-seperation = 25;
 time = 0:.01:9.99;
-paths = getPaths(time, seperation);
+paths = getPaths(time, -20, 0, 20 * sin(pi / 4), 20 * cos(pi / 4));
 YInterceptor = paths.interceptor;
 YThreat = paths.threat;
 
