@@ -17,9 +17,9 @@ cameraAngleUp2 = 10*pi/180;
 cameraAngleToSide2 = 0; 
 
 %NOTE: test different numbers (to change), in meters
-disOffGround=0;
-cam1PosX=25;
-cam2PosX=25;
+disOffGround=3;
+cam1PosX=0;
+cam2PosX=0;
 cam1PosY=1;
 cam2PosY=-1;
 fovLineLength=20;
@@ -28,12 +28,13 @@ fovLineLength=20;
 height=.1129;
 width=.1158;
 
+setGlobal();
+global initialXThreat initialZThreat initialVXThreat initialVZThreat;
 
 
 %Get paths
-seperation = 20;
 time = 0:.01:9.99;
-paths = getPaths(time, seperation);
+paths = getPaths(time, initialXThreat, initialZThreat, initialVXThreat, initialVZThreat);
 YInterceptor = paths.interceptor;
 YThreat = paths.threat;
 
