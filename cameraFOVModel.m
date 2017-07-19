@@ -18,9 +18,11 @@ cameraAngleToSide2 = 0;
 
 %NOTE: test different numbers (to change), in meters
 disFromT = 15;
-disBetween= 5;
+disBetweenX= 5;
 disOffGround=0;
-cam1Pos=0;
+cam1PosX=0;
+cam1PosY=15;
+cam2PosY=15;
 
 %dimensions of camera
 height=2;
@@ -48,10 +50,10 @@ hold on
 plot3(YThreat(:,3), zeros(4,1000), YThreat(:,4)); grid on
 
 %camera 1 location, NOTE: a variable to change
-plot3([cam1Pos,cam1Pos,width+cam1Pos,width+cam1Pos,cam1Pos], [disFromT,disFromT,disFromT,disFromT,disFromT], [disOffGround,disOffGround+height,disOffGround+height,disOffGround,disOffGround]);
+plot3([cam1PosX,cam1PosX,width+cam1PosX,width+cam1PosX,cam1PosX], [disFromT,disFromT,disFromT,disFromT,disFromT], [disOffGround,disOffGround+height,disOffGround+height,disOffGround,disOffGround]);
 
 %camera 2 location, NOTE: a variable to change
-plot3([disBetween+cam1Pos,disBetween+cam1Pos,disBetween+width+cam1Pos,disBetween+width+cam1Pos,disBetween+cam1Pos], [disFromT,disFromT,disFromT,disFromT,disFromT], [disOffGround,disOffGround+height,disOffGround+height,disOffGround,disOffGround]);
+plot3([disBetweenX+cam1PosX,disBetweenX+cam1PosX,disBetweenX+width+cam1PosX,disBetweenX+width+cam1PosX,disBetweenX+cam1PosX], [disFromT,disFromT,disFromT,disFromT,disFromT], [disOffGround,disOffGround+height,disOffGround+height,disOffGround,disOffGround]);
 
 %camera 1 bore's sight line
 boreVecX = zeros (disFromT,1);
@@ -69,12 +71,12 @@ pos = 1;
 
 while count>0
     
-    boreVecX(pos2) = count * tan(cameraAngleToSide)+width/2+cam1Pos;
+    boreVecX(pos2) = count * tan(cameraAngleToSide)+width/2+cam1PosX;
     boreVecY(pos) = count;
     boreVecZ(pos2) = count * tan(cameraAngleUp)+disOffGround+height/2;
     
     %camera 2
-    boreVecX2(pos2) = count * tan(cameraAngleToSide2)+width/2+disBetween+cam1Pos;
+    boreVecX2(pos2) = count * tan(cameraAngleToSide2)+width/2+disBetweenX+cam1PosX;
     boreVecY2(pos) = count;
     boreVecZ2(pos2) = count * tan(cameraAngleUp2)+disOffGround+height/2;
     
@@ -129,16 +131,16 @@ while count>0
     lowerRightZ(pos2) = boreVecZ(pos2) - count * tan(thetaY/2) - height/2;
     
     %camera 2
-    lowerLeftX2(pos2) = boreVecX(pos2)- count * tan (thetaX/2) - width/2+disBetween ;
+    lowerLeftX2(pos2) = boreVecX(pos2)- count * tan (thetaX/2) - width/2+disBetweenX ;
     lowerLeftZ2(pos2) = boreVecZ(pos2) - count * tan(thetaY/2) - height/2;
     
-    upperLeftX2(pos2) = boreVecX(pos2)- count * tan (thetaX/2) - width/2+disBetween ;
+    upperLeftX2(pos2) = boreVecX(pos2)- count * tan (thetaX/2) - width/2+disBetweenX ;
     upperLeftZ2(pos2) = boreVecZ(pos2) + count * tan(thetaY/2) + height/2;
     
-    upperRightX2(pos2) = boreVecX(pos2)+ count * tan (thetaX/2) +width/2+disBetween ;
+    upperRightX2(pos2) = boreVecX(pos2)+ count * tan (thetaX/2) +width/2+disBetweenX ;
     upperRightZ2(pos2) = boreVecZ(pos2) + count * tan(thetaY/2) + height/2;
     
-    lowerRightX2(pos2) = boreVecX(pos2)+ count * tan (thetaX/2) + width/2 +disBetween;
+    lowerRightX2(pos2) = boreVecX(pos2)+ count * tan (thetaX/2) + width/2 +disBetweenX;
     lowerRightZ2(pos2) = boreVecZ(pos2) - count * tan(thetaY/2) - height/2;   
     
     pos2=pos2-1;
@@ -153,7 +155,7 @@ plot3(lowerRightX,boreVecY , lowerRightZ,'--');
 plot3(upperRightX,boreVecY , upperRightZ,'--');
 
 %create funnels
-plane1X=[cam1Pos,cam1Pos, upperLeftX(disFromT),lowerLeftX(disFromT),cam1Pos];
+plane1X=[cam1PosX,cam1PosX, upperLeftX(disFromT),lowerLeftX(disFromT),cam1PosX];
 plane1Y=[disFromT,disFromT, 0,0,disFromT];
 plane1Z=[disOffGround, disOffGround+height, upperLeftZ(disFromT),lowerLeftZ(disFromT),disOffGround];
 
@@ -162,45 +164,45 @@ colors=[.5,.5,.5,.5,.5];
 fill3(plane1X,plane1Y,plane1Z,colors);
 alpha(.5);
 
-plane2X=[cam1Pos,width+cam1Pos,upperRightX(disFromT),upperLeftX(disFromT),cam1Pos];
+plane2X=[cam1PosX,width+cam1PosX,upperRightX(disFromT),upperLeftX(disFromT),cam1PosX];
 plane2Z=[disOffGround+height,disOffGround+height,upperRightZ(disFromT),upperLeftZ(disFromT) ,disOffGround+height];
 
 fill3(plane2X,plane1Y,plane2Z,colors);
 alpha(.5);
 
-plane3X=[width+cam1Pos,width+cam1Pos,upperRightX(disFromT) ,lowerRightX(disFromT) ,width+cam1Pos];
+plane3X=[width+cam1PosX,width+cam1PosX,upperRightX(disFromT) ,lowerRightX(disFromT) ,width+cam1PosX];
 plane3Z=[disOffGround,disOffGround+height,upperRightZ(disFromT),lowerRightZ(disFromT),disOffGround];
 
 fill3(plane3X,plane1Y,plane3Z, colors);
 alpha(.5);
 
-plane4X=[cam1Pos,width+cam1Pos,lowerRightX(disFromT),lowerLeftX(disFromT),cam1Pos];
+plane4X=[cam1PosX,width+cam1PosX,lowerRightX(disFromT),lowerLeftX(disFromT),cam1PosX];
 plane4Z=[disOffGround,disOffGround,lowerRightZ(disFromT),lowerLeftZ(disFromT),disOffGround];
 
 fill3(plane4X,plane1Y,plane4Z,colors);
 alpha(.5);
 
 %camera2 funnels
-plane1X=[disBetween+cam1Pos,disBetween+cam1Pos, upperLeftX(disFromT)+disBetween,lowerLeftX(disFromT)+disBetween,disBetween+cam1Pos];
+plane1X=[disBetweenX+cam1PosX,disBetweenX+cam1PosX, upperLeftX(disFromT)+disBetweenX,lowerLeftX(disFromT)+disBetweenX,disBetweenX+cam1PosX];
 plane1Y=[disFromT,disFromT, 0,0,disFromT];
 plane1Z=[disOffGround, disOffGround+height, upperLeftZ(disFromT),lowerLeftZ(disFromT),disOffGround];
 
 fill3(plane1X,plane1Y,plane1Z,colors);
 alpha(.5);
 
-plane2X=[disBetween+cam1Pos,width+disBetween+cam1Pos,upperRightX(disFromT)+disBetween,upperLeftX(disFromT)+disBetween,disBetween+cam1Pos];
+plane2X=[disBetweenX+cam1PosX,width+disBetweenX+cam1PosX,upperRightX(disFromT)+disBetweenX,upperLeftX(disFromT)+disBetweenX,disBetweenX+cam1PosX];
 plane2Z=[disOffGround+height,disOffGround+height,upperRightZ(disFromT),upperLeftZ(disFromT) ,disOffGround+height];
 
 fill3(plane2X,plane1Y,plane2Z,colors);
 alpha(.5);
 
-plane3X=[width+disBetween+cam1Pos,width+disBetween+cam1Pos,upperRightX(disFromT)+disBetween ,lowerRightX(disFromT)+disBetween ,width+disBetween+cam1Pos];
+plane3X=[width+disBetweenX+cam1PosX,width+disBetweenX+cam1PosX,upperRightX(disFromT)+disBetweenX ,lowerRightX(disFromT)+disBetweenX ,width+disBetweenX+cam1PosX];
 plane3Z=[disOffGround,disOffGround+height,upperRightZ(disFromT),lowerRightZ(disFromT),disOffGround];
 
 fill3(plane3X,plane1Y,plane3Z, colors);
 alpha(.5);
 
-plane4X=[disBetween+cam1Pos,width+disBetween+cam1Pos,lowerRightX(disFromT)+disBetween,lowerLeftX(disFromT)+disBetween,disBetween+cam1Pos];
+plane4X=[disBetweenX+cam1PosX,width+disBetweenX+cam1PosX,lowerRightX(disFromT)+disBetweenX,lowerLeftX(disFromT)+disBetweenX,disBetweenX+cam1PosX];
 plane4Z=[disOffGround,disOffGround,lowerRightZ(disFromT),lowerLeftZ(disFromT),disOffGround];
 
 fill3(plane4X,plane1Y,plane4Z,colors);
