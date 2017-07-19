@@ -1,4 +1,4 @@
-setGlobal();
+setup();
 global initialXThreat initialZThreat initialVXThreat initialVZThreat;
 global sigmaX sigmaZ;
 global timeThreshhold;

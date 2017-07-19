@@ -15,7 +15,6 @@ persistent thetaLast;
 persistent pLast;
 persistent R H;
 
-setGlobal();
 global sigmaX sigmaZ;
 global initialVXThreat initialVZThreat;
 global Q;
