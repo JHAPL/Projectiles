@@ -35,6 +35,10 @@ interceptorParams.area = 0.0025652;
 interceptorParams.drag = 0.47;
 interceptorIC = [initialVXInterceptor,initialVZInterceptor,initialXInterceptor,initialZInterceptor];
 
+%Physical constants
+global gravity density
+gravity = 9.8; %m/s^2
+density = 1.225; %of the air in kg/m^3
 
 end
 

@@ -7,10 +7,11 @@ global timeThreshhold;
 count = 0;
 
 %Options
-plots = false;
-loop = true;
+loop = false;
 activateSolenoid = false;
 
+
+plots = ~loop;
 distances = zeros(1,100);
 
 for a = 1:100
@@ -57,9 +58,8 @@ for a = 1:100
         
         if time < timeThreshhold
             %Time to launch
-            
             projectedTime = trajectorymodel(theta(1), theta(4), theta(2), theta(5),plots);
-            %actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), false);
+            actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), false);
             
             if(activateSolenoid)
                 projectedTime = projectedTime - toc;
