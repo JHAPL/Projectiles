@@ -3,8 +3,8 @@ clear
 clc
 %%
 % assigining the camera a value
-camR = webcam(1);
-camL = webcam(2);
+camR = webcam(2);
+camL = webcam(1);
 % lowering camera resolution
 camR.Resolution = '352x288';
 camL.Resolution = '352x288';
