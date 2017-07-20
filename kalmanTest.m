@@ -56,9 +56,10 @@ for a = 1:1000
         if time < timeThreshhold
             
             projectedTime = trajectorymodel(theta(1), theta(4), theta(2), theta(5),plots);
+            actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), false);
+
             if projectedTime ~= Inf && projectedTime > 0
                 
-                %actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), false);
                 % projectedTime = actualTime;
                 
                 %Find the paramaters of the threat when the interceptor is

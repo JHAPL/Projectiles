@@ -39,7 +39,7 @@ intersectionY = intersectionY(length(intersectionY));
 
 %Iterator through the paths
 %Finds the index of the first x greater than the intersection point
-%Finds the time at these points00
+%Finds the time at these points
 iThreat = find(YThreat(:, 3) > intersectionX, 1);
 xBefore = YThreat(iThreat - 1, 3);
 xAfter = YThreat(iThreat, 3);
