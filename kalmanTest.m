@@ -9,6 +9,7 @@ count = 0;
 %Options
 plots = true;
 loop = false;
+activateSolenoid = false;
 
 for a = 1:1000
     
@@ -56,8 +57,15 @@ for a = 1:1000
         if time < timeThreshhold
             
             projectedTime = trajectorymodel(theta(1), theta(4), theta(2), theta(5),plots);
-            actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), false);
+            %actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), false);
 
+            if(activateSolenoid)
+                projectedTime = projectedTime - toc;
+                currentTime = clock;
+                triggerSolenoid(projectedTime + currentTime(6));
+                break;
+            end
+            
             if projectedTime ~= Inf && projectedTime > 0
                 
                 % projectedTime = actualTime;
@@ -86,7 +94,7 @@ for a = 1:1000
                     end
                 end
                 
-     
+                
                 if(loop && minDistance < .13)
                     count = count + 1;
                 end
@@ -126,4 +134,3 @@ for a = 1:1000
         break;
     end
 end
-
