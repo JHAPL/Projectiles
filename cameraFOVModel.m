@@ -1,7 +1,7 @@
 clear;
 clc;
 tic;
-
+setup();
 
 %angles in radians
 thetaX=44.9152 * pi / 180;

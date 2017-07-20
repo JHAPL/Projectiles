@@ -1,6 +1,7 @@
 clear;
 clc;
 tic;
+setup();
 
 
 %angles in radians
@@ -28,7 +29,6 @@ fovLineLength=20;
 height=.1129;
 width=.1158;
 
-setGlobal();
 global initialXThreat initialZThreat initialVXThreat initialVZThreat;
 
 
