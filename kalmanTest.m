@@ -3,6 +3,8 @@ global initialXThreat initialZThreat initialVXThreat initialVZThreat;
 global sigmaX sigmaZ;
 global timeThreshhold;
 count = 0;
+rpi = raspi;
+activateSolenoid = true;
 %for a = 1:1000
 
 %Change in time (represents ideal frames/second and update rate)
@@ -32,6 +34,7 @@ x_truth = path.threat(:,3);
 z_truth = path.threat(:,4);
 
 for i = 1:length(t)
+    tic;
     realX = threat(i,3);
     realZ = threat(i,4);
     x = realX + randn(1) * sigmaX;
@@ -50,6 +53,13 @@ for i = 1:length(t)
     if time < timeThreshhold
         
         projectedTime = trajectorymodel(theta(1), theta(4), theta(2), theta(5),true);
+        if(activateSolenoid)
+            projectedTime = projectedTime - toc;
+            currentTime = clock;
+            triggerSolenoid(projectedTime + currentTime(6));
+            break;
+        end
+        
         if projectedTime ~= Inf
             %actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), false);
             % projectedTime = actualTime;
@@ -90,13 +100,13 @@ for i = 1:length(t)
     
 end
 
+
 x_measured = x_measured(1:i);
 z_measured = z_measured(1:i);
 %x_truth = x_truth(1:i);
 %z_truth = z_truth(1:i);
 x_filtered = x_filtered(1:i);
 z_filtered = z_filtered(1:i);
-
 
 
 plot(x_measured,z_measured,'bo')
