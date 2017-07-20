@@ -9,7 +9,8 @@ function timeTillLaunch = trajectorymodel(startingX, startingZ, startingVX, star
 % makePlots - A boolean (true if plots are to be displayed)
 %%% ============================= Outputs ============================= %%%
 % timeTillLaunch - The amount of time until launch from the measurement
-% time. NOT accounting for process time
+% time. NOT accounting for process time. If no intersection, return
+% infinity
 
 %Time interval
 timeStep = 0.01;
@@ -41,6 +42,11 @@ intersectionY = intersectionY(length(intersectionY));
 %Finds the index of the first x greater than the intersection point
 %Finds the time at these points
 iThreat = find(YThreat(:, 3) > intersectionX, 1);
+%If there is no intersection, return infinity for time
+if(iThreat == 1)
+    timeTillLaunch = Inf;
+    return;
+end
 xBefore = YThreat(iThreat - 1, 3);
 xAfter = YThreat(iThreat, 3);
 xDif = xAfter - xBefore;
@@ -51,6 +57,10 @@ timeIntersectionThreat = time(iThreat) + ratio * timeStep;
 %Depends on initial direction of interceptor
 global initialVXInterceptor;
 iInterceptor = find(sign(YInterceptor(:, 3)- intersectionX) == sign(initialVXInterceptor), 1);
+if(iInterceptor == 1)
+    timeTillLaunch = Inf;
+    return;
+end
 xBefore = YInterceptor(iInterceptor - 1, 3);
 xAfter = YInterceptor(iInterceptor, 3);
 xDif = xAfter - xBefore;
