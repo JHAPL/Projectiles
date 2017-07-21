@@ -13,16 +13,14 @@ function estimate = kfilter(first, x, z, dt)
 
 persistent thetaLast;
 persistent pLast;
-persistent Q R H;
+persistent R H;
 
-setGlobal();
 global sigmaX sigmaZ;
 global initialVXThreat initialVZThreat;
-
+global Q;
 
 if(first)
-     %Process error matrix
-    Q = .1 * diag(ones(6, 1)); %For now
+    
     %Simulated camera error for measurements
     
     R = zeros(2, 2);
