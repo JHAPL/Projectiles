@@ -15,7 +15,7 @@ function coor = coordinateConverter(rx, ry, lx, ly)
     alphax = 90 * pi/180;
     beta = .1276 * pi/180;
 
-    %other angles
+    %other angles 
     alphal = alphax - lx * beta;
     alphar = alphax + rx * beta;
 
