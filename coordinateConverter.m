@@ -31,8 +31,8 @@ function coor = coordinateConverter(rx, ry, lx, ly)
     yr = d/2.0 - p*cos(alphar);
     xl = -abs(m*sin(alphal));
     xr = -abs(p*sin(alphar));
-    zl = abs( sqrt(xl^2 + ((d/2) + yl)^2) * tan(alphaz + ly * beta));
-    zr = abs( sqrt(xr^2 + ((d/2) - yr)^2) * tan(alphaz + ry * beta));
+    zl = abs((m) * tan(alphaz + ly * beta));
+    zr = abs((p) * tan(alphaz + ry * beta));
     
     x = (xl + xr)/2.0;
     y = (yl + yr)/2.0;
