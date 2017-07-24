@@ -10,15 +10,15 @@ thetaY=36.7488 * pi /180;
 
 %angle of camera tilted up and to sides.. RADIANS
 %NOTE: variables to change
-cameraAngleUp = 10*pi/180;
+cameraAngleUp = 0;
 cameraAngleToSide = 0; 
 
 %2 indicates camera 2
-cameraAngleUp2 = 10*pi/180;
+cameraAngleUp2 = 0;
 cameraAngleToSide2 = 0; 
 
 %NOTE: test different numbers (to change), in meters
-disOffGround=3;
+disOffGround=0;
 cam1PosX=0;
 cam2PosX=0;
 cam1PosY=1;
