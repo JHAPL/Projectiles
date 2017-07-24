@@ -7,11 +7,14 @@ global timeThreshhold;
 count = 0;
 
 %Options
-plots = true;
 loop = false;
 activateSolenoid = true;
 
-for a = 1:1000
+
+plots = ~loop;
+distances = zeros(1,100);
+
+for a = 1:100
     
     %Change in time between pictures (represents ideal frames/second and update rate)
     dt = 1/25;
@@ -19,7 +22,6 @@ for a = 1:1000
     t = 0:dt:5;
     
     
-    %TODO: Make folders
     %TODO: ESTIMATE DRAG COEEFICIANTS
     
     
@@ -54,13 +56,12 @@ for a = 1:1000
         x_measured(i) = x;
         z_measured(i) = z;
         
-        %Its velocity thats the problem
-        if time < timeThreshhold
-            
+        
+        if time < timeThreshhold            
             projectedTime = trajectorymodel(theta(1), theta(4), theta(2), theta(5),plots)
             %actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), false);
             
-            
+
             
             if(activateSolenoid)
                 projectedTime = projectedTime - toc;
@@ -100,7 +101,8 @@ for a = 1:1000
                 if(loop && minDistance < .13)
                     count = count + 1;
                 end
-                minDistance;
+                distances(1, a) = minDistance;
+
             end
             
             if(loop)
@@ -135,4 +137,7 @@ for a = 1:1000
     if(~loop)
         break;
     end
+end
+if(loop)
+    histogram(distances, 10);
 end

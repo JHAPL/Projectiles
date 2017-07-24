@@ -2,8 +2,8 @@ function f = setGlobal()
 global initialXThreat initialZThreat initialVXThreat initialVZThreat;
 initialXThreat = -15;
 initialZThreat = 0;
-initialVXThreat = 5;
-initialVZThreat = 15;
+initialVXThreat = 10 * cos(pi / 3);
+initialVZThreat = 15 * sin(pi / 3);
 
 global initialXInterceptor initialZInterceptor initialVXInterceptor initialVZInterceptor;
 initialXInterceptor = 0;
@@ -13,14 +13,16 @@ initialVZInterceptor = 15 * cos(pi/4);
 
 %Process error matrix
 global sigmaX sigmaZ Q;
-sigmaX = .5; %When you change this change Q as well. Actually not sure of this
-sigmaZ = .5;
+sigmaX = 0.4; %When you change this change Q as well. Actually not sure of this
+sigmaZ = 0.4;
 Q =  .01 * diag(ones(6, 1)); %.01 a good value for 0.5/0.4
+%Q =  .1 * (ones(6, 6)); %.01 a good value for 0.5/0.4
 
 %If estimated time until launch is less than this, stop camera measurments
 %and commence better estimates and launch
 global timeThreshhold;
 timeThreshhold = 0.6;
+
 
 %Define parameters for threat structure
 global threatParams;
@@ -35,6 +37,10 @@ interceptorParams.area = 0.0025652;
 interceptorParams.drag = 0.47;
 interceptorIC = [initialVXInterceptor,initialVZInterceptor,initialXInterceptor,initialZInterceptor];
 
+%Physical constants
+global gravity density
+gravity = 9.8; %m/s^2
+density = 1.225; %of the air in kg/m^3
 
 end
 
