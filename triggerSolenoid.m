@@ -1,7 +1,20 @@
-function z = triggerSolenoid(launchTime)
+function z = triggerSolenoid(projectedTime)
 
-pin = 3;
+pin = 7;
+tic;
 
-configureDigitalPin(rpi,pin,'output');
-writeDigitalPin(rpi,pin,0);
-writeDigitalPin(rpi,pin,1);
+while true
+    projectedTime - toc
+    if projectedTime - toc < 0
+        disp('pew')
+        
+        %configureDigitalPin(rpi,pin,'output');
+        %writeDigitalPin(rpi,pin,0);
+        %writeDigitalPin(rpi,pin,1);
+        
+        break;
+    end
+    
+end
+
+end

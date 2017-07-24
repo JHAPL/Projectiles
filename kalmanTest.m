@@ -9,7 +9,7 @@ count = 0;
 %Options
 plots = true;
 loop = false;
-activateSolenoid = false;
+activateSolenoid = true;
 
 for a = 1:1000
     
@@ -39,6 +39,7 @@ for a = 1:1000
     z_truth = path.threat(:,4);
     
     for i = 1:length(t)
+        tic;
         realX = threat(i,3);
         realZ = threat(i,4);
         x = realX + randn(1) * sigmaX;
@@ -56,13 +57,14 @@ for a = 1:1000
         %Its velocity thats the problem
         if time < timeThreshhold
             
-            projectedTime = trajectorymodel(theta(1), theta(4), theta(2), theta(5),plots);
+            projectedTime = trajectorymodel(theta(1), theta(4), theta(2), theta(5),plots)
             %actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), false);
-
+            
+            
+            
             if(activateSolenoid)
                 projectedTime = projectedTime - toc;
-                currentTime = clock;
-                triggerSolenoid(projectedTime + currentTime(6));
+                triggerSolenoid(projectedTime);
                 break;
             end
             
@@ -98,7 +100,7 @@ for a = 1:1000
                 if(loop && minDistance < .13)
                     count = count + 1;
                 end
-                minDistance
+                minDistance;
             end
             
             if(loop)

@@ -20,7 +20,7 @@ Q =  .01 * diag(ones(6, 1)); %.01 a good value for 0.5/0.4
 %If estimated time until launch is less than this, stop camera measurments
 %and commence better estimates and launch
 global timeThreshhold;
-timeThreshhold = 0.3;
+timeThreshhold = 0.6;
 
 %Define parameters for threat structure
 global threatParams;
