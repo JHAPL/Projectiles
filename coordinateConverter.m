@@ -11,7 +11,7 @@ function coor = coordinateConverter(rx, ry, lx, ly)
     d = .98; %distance between cameras
     
     %camera angles
-    alphaz = 10 * pi/180;
+    alphaz =  10 * pi/180;
     alphax = 90 * pi/180;
     beta = .1276 * pi/180;
 
