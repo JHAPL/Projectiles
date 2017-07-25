@@ -7,19 +7,21 @@ global timeThreshhold;
 count = 0;
 
 %Options
-plots = true;
 loop = false;
 activateSolenoid = false;
 
-for a = 1:1000
+
+plots = ~loop;
+distances = zeros(1,100);
+
+for a = 1:100
     
     %Change in time between pictures (represents ideal frames/second and update rate)
-    dt = 1/25;
+    dt = 1/2500;
     %Total time
     t = 0:dt:5;
     
     
-    %TODO: Make folders
     %TODO: ESTIMATE DRAG COEEFICIANTS
     
     
@@ -35,8 +37,8 @@ for a = 1:1000
     z_filtered = zeros(size(t));
     x_measured = zeros(size(t));
     z_measured = zeros(size(t));
-    x_truth = path.threat(:,3);
-    z_truth = path.threat(:,4);
+    x_truth = threat(:,1);
+    z_truth = threat(:,2);
     
     for i = 1:length(t)
         realX = threat(i,3);
@@ -48,17 +50,18 @@ for a = 1:1000
         time = estimate.time;
         theta = estimate.theta;
         
-        x_filtered(i) = theta(1);
-        z_filtered(i) = theta(4);
+        x_filtered(i) = theta(2);
+        z_filtered(i) = theta(5);
         x_measured(i) = x;
         z_measured(i) = z;
-        
-        %Its velocity thats the problem
+
+
         if time < timeThreshhold
             
-            projectedTime = trajectorymodel(theta(1), theta(4), theta(2), theta(5),plots);
-            %actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), false);
-
+            %Time to launch
+            projectedTime = trajectorymodel(theta(1), theta(4), theta(2), theta(5),false);
+            actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), false);
+            %projectedTime = actualTime;
             if(activateSolenoid)
                 projectedTime = projectedTime - toc;
                 currentTime = clock;
@@ -67,7 +70,6 @@ for a = 1:1000
             end
             
             if projectedTime ~= Inf && projectedTime > 0
-                
                 % projectedTime = actualTime;
                 
                 %Find the paramaters of the threat when the interceptor is
@@ -98,6 +100,7 @@ for a = 1:1000
                 if(loop && minDistance < .13)
                     count = count + 1;
                 end
+                distances(1, a) = minDistance;
                 minDistance
             end
             
@@ -114,23 +117,27 @@ for a = 1:1000
     if(plots)
         x_measured = x_measured(1:i);
         z_measured = z_measured(1:i);
-        %x_truth = x_truth(1:i);
-        %z_truth = z_truth(1:i);
+        x_truth = x_truth(1:i);
+        z_truth = z_truth(1:i);
         x_filtered = x_filtered(1:i);
         z_filtered = z_filtered(1:i);
         
+        t = t(1:i);
         
-        
-        plot(x_measured,z_measured,'bo')
+        %plot(x_measured,z_measured,'bo')
         hold on
-        plot(x_truth,z_truth,'-g','linewidth',1)
-        plot(x_filtered,z_filtered,'-*r','linewidth',2)
-        legend('Interceptor','Projected Threat')
-        xlim([-40,40]);
-        ylim([0.1, 20]);
+        plot(t,z_filtered - z_truth','-r','linewidth',1)
+        
+        
+        %plot(t, z_filtered,'-r','linewidth',1)
+        legend('Difference in Vs')
+
     end
     
     if(~loop)
         break;
     end
+end
+if(loop)
+    histogram(distances, 10);
 end
