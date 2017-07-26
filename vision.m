@@ -10,7 +10,7 @@ camR.Resolution = '352x288';
 camL.Resolution = '352x288';
 
 q = 0;
-while(q <= 5)
+while(q <= 100)
     picR = snapshot(camR);
     picL = snapshot(camL);
     r = calc(picR);
@@ -24,8 +24,8 @@ end
 function centerPoint = calc(ball)
     
     red = double(ball(:,:,1)); green = double(ball(:,:,2)); blue = double(ball(:,:,3));
-    rtg = 2.5; 
-    rtb = 2.5;
+    rtg = 2.0; 
+    rtb = 2.0;
     darktresh = 20;
     out = red./(green)>rtg & red./(blue)>rtb & red>darktresh;
     

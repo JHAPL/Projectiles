@@ -23,6 +23,8 @@ Q =  .001 * diag(ones(6, 1)); %.01 a good value for 0.5/0.4
 global timeThreshhold;
 timeThreshhold = 0.3;
 
+
+
 %Define parameters for threat structure
 global threatParams;
 threatParams.mass = 1.134;

@@ -11,7 +11,6 @@ loop = false;
 activateSolenoid = false;
 debugging = false;
 
-
 plots = ~loop;
 distances = zeros(1,100);
 for a = 1:100
@@ -47,6 +46,7 @@ for a = 1:100
     
     
     for i = 1:length(t)
+        tic;
         realX = threat(i,3);
         realZ = threat(i,4);
         x = realX + randn(1) * sigmaX;
@@ -69,10 +69,10 @@ for a = 1:100
             projectedTime = trajectorymodel(theta(1), theta(4), theta(2), theta(5),plots && ~debugging);
             actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), plots && ~debugging);
             %projectedTime = actualTime;
+
             if(activateSolenoid)
                 projectedTime = projectedTime - toc;
-                currentTime = clock;
-                triggerSolenoid(projectedTime + currentTime(6));
+                triggerSolenoid(projectedTime);
                 break;
             end
             
@@ -109,6 +109,7 @@ for a = 1:100
                 end
                 distances(1, a) = minDistance;
                 minDistance
+
             end
             
             if(loop)
@@ -160,6 +161,7 @@ for a = 1:100
             legend('Difference in model vzs','Difference in model zs')
             
         end
+
         
     end
     
