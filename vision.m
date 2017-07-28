@@ -10,7 +10,7 @@ camR.Resolution = '352x288';
 camL.Resolution = '352x288';
 
 q = 0;
-while(q <= 100000)
+while(q <= 4)
     picR = snapshot(camR);
     picL = snapshot(camL);
     r = calc(picR);
