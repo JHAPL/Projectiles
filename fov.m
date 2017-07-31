@@ -14,9 +14,9 @@ cameraAngleInward = pi / 20;
 
 %NOTE: test different numbers (to change), in meters
 disOffGround=0;
-camX = -3;
+camX = 0;
 yOffset = 1;
-fovLineLength=20;
+fovLineLength=25;
 
 %dimensions of camera
 height=.1129;
@@ -76,36 +76,8 @@ fill3(pointsL([1,4,5], 1), pointsL([1,4,5], 2), pointsL([1,4,5], 3), 0.5);
 
 alpha(0.2)
 
-plot3([camX, (topLeftL(1) + topRightL(1)) / 2], [0, 0], [disOffGround, topLeftL(3)]);
-intersections([camX, (topLeftL(1) + topRightL(1)) / 2], [disOffGround, topLeftL(3)], threatPath(:, 1), threatPath(:, 2))
-xMin = -20;
-disp(xMax - xMin)
+% plot3([camX, (topLeftL(1) + topRightL(1)) / 2], [0, 0], [disOffGround, topLeftL(3)]);
+% intersections([camX, (topLeftL(1) + topRightL(1)) / 2], [disOffGround, topLeftL(3)], threatPath(:, 1), threatPath(:, 2))
+% xMin = -20;
+% disp(xMax - xMin)
 
-normal = cross(topLeftL - initialPoint, topRightL - initialPoint);
-normal = normal / norm(normal);
-
-xMax = -20;
-for i = 1:(length(threatPath) - 1)
-    p1 = [threatPath(i, 1), 0, threatPath(i,2)];
-    p2 = [threatPath(i + 1, 1), 0, threatPath(i + 1,2)];
-    if(sign(dot(normal, p1)) ~= sign(dot(normal, p2)))
-        xMax = (threatPath(i,1) + threatPath(i + 1,1)) / 2;
-        break;
-    end
-end
-
-xMin = -20;
-normal = cross(topLeftL - topRightL, bottomLeftL - topLeftL);
-normal = normal / norm(normal);
-for i = 1:(length(threatPath) - 1)
-    p1 = [threatPath(i, 1), 0, threatPath(i,2)];
-    p2 = [threatPath(i + 1, 1), 0, threatPath(i + 1,2)];
-    if(sign(dot(normal, p1)) ~= sign(dot(normal, p2)))
-        xMin = (threatPath(i,1) + threatPath(i + 1,1)) / 2;
-        break;
-    end
-end
-
-disp(xMax - xMin);
-xMax
-xMin
