@@ -10,7 +10,7 @@ thetaY=36.7488 * pi /180;
 %angle of camera tilted up and to sides.. RADIANS
 %NOTE: variables to change
 cameraAngleUp = thetaY / 2;
-cameraAngleInward = pi / 10; 
+cameraAngleInward = pi / 20; 
 
 %NOTE: test different numbers (to change), in meters
 disOffGround=0;
@@ -45,44 +45,43 @@ ylim([-15, 15]);
 zlim([0, 15]);
 
 
-initialPoint = [camX, yOffset, disOffGround + height / 2];
 angleUp = cameraAngleUp + thetaY / 2;
 angleDown = cameraAngleUp - thetaY / 2;
 
-topLeft = fovLineLength * [-cos(angleUp) * cos(thetaX / 2 - cameraAngleInward), cos(angleUp) * sin(thetaX / 2 - cameraAngleInward), sin(angleUp)] + initialPoint;  
-topRight = fovLineLength * [-cos(angleUp) * cos(thetaX / 2 + cameraAngleInward), -cos(angleUp) * sin(thetaX / 2 + cameraAngleInward), sin(angleUp)]  + initialPoint;  
-bottomLeft = fovLineLength * [-cos(angleDown) * cos(thetaX / 2 - cameraAngleInward), cos(angleDown) * sin(thetaX / 2 - cameraAngleInward), sin(angleDown)]  + initialPoint;  
-bottomRight = fovLineLength * [-cos(angleDown) * cos(thetaX / 2 + cameraAngleInward), -cos(angleDown) * sin(thetaX / 2 + cameraAngleInward), sin(angleDown)]  + initialPoint;  
+initialPointR = [camX, yOffset, disOffGround + height / 2];
+topLeftR = fovLineLength * [-cos(angleUp) * cos(thetaX / 2 - cameraAngleInward), cos(angleUp) * sin(thetaX / 2 - cameraAngleInward), sin(angleUp)] + initialPointR;  
+topRightR = fovLineLength * [-cos(angleUp) * cos(thetaX / 2 + cameraAngleInward), -cos(angleUp) * sin(thetaX / 2 + cameraAngleInward), sin(angleUp)]  + initialPointR;  
+bottomLeftR = fovLineLength * [-cos(angleDown) * cos(thetaX / 2 - cameraAngleInward), cos(angleDown) * sin(thetaX / 2 - cameraAngleInward), sin(angleDown)]  + initialPointR;  
+bottomRightR = fovLineLength * [-cos(angleDown) * cos(thetaX / 2 + cameraAngleInward), -cos(angleDown) * sin(thetaX / 2 + cameraAngleInward), sin(angleDown)]  + initialPointR;  
 
-points = [initialPoint; topLeft; topRight; bottomLeft; bottomRight];
-fill3(points(1:3, 1), points(1:3, 2), points(1:3, 3), 0.5);
+pointsR = [initialPointR; topLeftR; topRightR; bottomLeftR; bottomRightR];
+fill3(pointsR(1:3, 1), pointsR(1:3, 2), pointsR(1:3, 3), 0.5);
 hold on
-fill3(points([1,2,4], 1), points([1,2,4], 2), points([1,2,4], 3), 0.5);
-fill3(points([1,3,5], 1), points([1,3,5], 2), points([1,3,5], 3), 0.5);
-fill3(points([1,4,5], 1), points([1,4,5], 2), points([1,4,5], 3), 0.5);
+fill3(pointsR([1,2,4], 1), pointsR([1,2,4], 2), pointsR([1,2,4], 3), 0.5);
+fill3(pointsR([1,3,5], 1), pointsR([1,3,5], 2), pointsR([1,3,5], 3), 0.5);
+fill3(pointsR([1,4,5], 1), pointsR([1,4,5], 2), pointsR([1,4,5], 3), 0.5);
 
 
-initialPoint = [camX, -yOffset, disOffGround + height / 2];
+initialPointL = [camX, -yOffset, disOffGround + height / 2];
+topLeftL = fovLineLength * [-cos(angleUp) * cos(thetaX / 2 + cameraAngleInward), cos(angleUp) * sin(thetaX / 2 + cameraAngleInward), sin(angleUp)] + initialPointL;  
+topRightL = fovLineLength * [-cos(angleUp) * cos(thetaX / 2 - cameraAngleInward), -cos(angleUp) * sin(thetaX / 2 - cameraAngleInward), sin(angleUp)]  + initialPointL;  
+bottomLeftL = fovLineLength * [-cos(angleDown) * cos(thetaX / 2 + cameraAngleInward), cos(angleDown) * sin(thetaX / 2 + cameraAngleInward), sin(angleDown)]  + initialPointL;  
+bottomRightL = fovLineLength * [-cos(angleDown) * cos(thetaX / 2 - cameraAngleInward), -cos(angleDown) * sin(thetaX / 2 - cameraAngleInward), sin(angleDown)]  + initialPointL;  
 
-topLeft = fovLineLength * [-cos(angleUp) * cos(thetaX / 2 + cameraAngleInward), cos(angleUp) * sin(thetaX / 2 + cameraAngleInward), sin(angleUp)] + initialPoint;  
-topRight = fovLineLength * [-cos(angleUp) * cos(thetaX / 2 - cameraAngleInward), -cos(angleUp) * sin(thetaX / 2 - cameraAngleInward), sin(angleUp)]  + initialPoint;  
-bottomLeft = fovLineLength * [-cos(angleDown) * cos(thetaX / 2 + cameraAngleInward), cos(angleDown) * sin(thetaX / 2 + cameraAngleInward), sin(angleDown)]  + initialPoint;  
-bottomRight = fovLineLength * [-cos(angleDown) * cos(thetaX / 2 - cameraAngleInward), -cos(angleDown) * sin(thetaX / 2 - cameraAngleInward), sin(angleDown)]  + initialPoint;  
-points = [initialPoint; topLeft; topRight; bottomLeft; bottomRight];
-fill3(points(1:3, 1), points(1:3, 2), points(1:3, 3), 0.5);
-hold on
-fill3(points([1,2,4], 1), points([1,2,4], 2), points([1,2,4], 3), 0.5);
-fill3(points([1,3,5], 1), points([1,3,5], 2), points([1,3,5], 3), 0.5);
-fill3(points([1,4,5], 1), points([1,4,5], 2), points([1,4,5], 3), 0.5);
+pointsL = [initialPointL; topLeftL; topRightL; bottomLeftL; bottomRightL];
+fill3(pointsL(1:3, 1), pointsL(1:3, 2), pointsL(1:3, 3), 0.5);
+fill3(pointsL([1,2,4], 1), pointsL([1,2,4], 2), pointsL([1,2,4], 3), 0.5);
+fill3(pointsL([1,3,5], 1), pointsL([1,3,5], 2), pointsL([1,3,5], 3), 0.5);
+fill3(pointsL([1,4,5], 1), pointsL([1,4,5], 2), pointsL([1,4,5], 3), 0.5);
 
 alpha(0.2)
 
+plot3([camX, (topLeftL(1) + topRightL(1)) / 2], [0, 0], [disOffGround, topLeftL(3)]);
+intersections([camX, (topLeftL(1) + topRightL(1)) / 2], [disOffGround, topLeftL(3)], threatPath(:, 1), threatPath(:, 2))
+xMin = -20;
+disp(xMax - xMin)
 
-
-
-
-
-normal = cross(topLeft - initialPoint, topRight - initialPoint);
+normal = cross(topLeftL - initialPoint, topRightL - initialPoint);
 normal = normal / norm(normal);
 
 xMax = -20;
@@ -96,7 +95,7 @@ for i = 1:(length(threatPath) - 1)
 end
 
 xMin = -20;
-normal = cross(topLeft - topRight, bottomLeft - topLeft);
+normal = cross(topLeftL - topRightL, bottomLeftL - topLeftL);
 normal = normal / norm(normal);
 for i = 1:(length(threatPath) - 1)
     p1 = [threatPath(i, 1), 0, threatPath(i,2)];
