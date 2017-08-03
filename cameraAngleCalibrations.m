@@ -1,4 +1,4 @@
-1%%
+%%
 clear
 clc
 %%
@@ -6,12 +6,12 @@ q = input('what camera (1 or 2) ');
 camera = webcam(q);
 camera.Resolution = '352x288';
 preview(camera)
-% a = input('face plane to ball ');
-% b = input('perpendicular plane to ball ');
-% c = input('height of the center of the ball ');
-a = 2.5;
-b = .5;
- c = .19;
+a = input('face plane to ball ');
+b = input('perpendicular plane to ball ');
+c = input('height of the center of the ball ');
+% a = 6;
+% b = 1.46;
+% c = 1.55;
 angle1 = atan(a/b);
 angle2 = atan(c/(sqrt(a^2 + b^2)));
 while(true)
