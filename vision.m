@@ -3,8 +3,8 @@ clear
 clc
 %%
 % assigining the camera a value
-camR = webcam(2);
-camL = webcam(1);
+camR = webcam(1);
+camL = webcam(2);
 % lowering camera resolution
 camR.Resolution = '352x288';
 camL.Resolution = '352x288';
@@ -17,6 +17,7 @@ lastPicture = tic;
 first = true;
 while(true)
     calculationTime = tic;
+
     picR = snapshot(camR);
     picL = snapshot(camL);
     r = calc(picR);
