@@ -9,14 +9,14 @@ count = 0;
 %Options
 loop = false;
 activateSolenoid = false;
-debugging = false;
+debugging = true;
 
 plots = ~loop;
 distances = zeros(1,100);
 for a = 1:100
     
     %Change in time between pictures (represents ideal frames/second and update rate)
-    dt = 1/25;
+    dt = 1/50;
     %Total time
     t = 0:dt:10;
     
@@ -30,7 +30,7 @@ for a = 1:100
     threat(1,:) = [];
     t(:,1) = [];
     
-    kfilter(true, initialXThreat,initialZThreat,0);
+    a = kfilter(true, initialXThreat,initialZThreat,0);
     
     x_filtered = zeros(size(t));
     z_filtered = zeros(size(t));
@@ -64,58 +64,57 @@ for a = 1:100
         vx_filtered(i) = theta(2);
         vz_filtered(i) = theta(5);
         
-        if time < timeThreshhold
+        if time < timeThreshhold && i > 3
+            t(i)
             %Time to launch
             projectedTime = trajectorymodel(theta(1), theta(4), theta(2), theta(5),plots && ~debugging);
-            actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), plots && ~debugging);
+            %actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), plots && ~debugging);
             %projectedTime = actualTime;
-
+            
+            if(projectedTime < 0 || projectedTime == Inf)
+                disp("Invalid Time Estimate");
+                break;
+            end
+            
             if(activateSolenoid)
                 projectedTime = projectedTime - toc;
                 triggerSolenoid(projectedTime);
                 break;
             end
             
-            if projectedTime ~= Inf && projectedTime > 0
-                % projectedTime = actualTime;
-                
-                %Find the paramaters of the threat when the interceptor is
-                %projected to launch
-                lastKnownI = fix(projectedTime / dt) + i;
-                lastKnownTime = fix(projectedTime / dt) * dt;
-                tInterval = 0:0.001:projectedTime - lastKnownTime;
-                if length(tInterval) > 1
-                    paths = getPaths(tInterval, threat(lastKnownI,3), threat(lastKnownI,4), threat(lastKnownI,1), threat(lastKnownI,2));
-                    launchDetails = paths.threat(end, :);
-                else
-                    launchDetails = threat(lastKnownI,:);
-                end
-                
-                %Check if they would actually intersect
-                tInterval = 0:0.001:10;
-                paths = getPaths(tInterval, launchDetails(3), launchDetails(4), launchDetails(1), launchDetails(2));
-                minDistance = Inf;
-                for j = 1:length(tInterval)
-                    distance = sqrt((paths.threat(j,3)-paths.interceptor(j,3))^2 + ...
-                        (paths.threat(j,4)-paths.interceptor(j,4))^2);
-                    if(distance < minDistance)
-                        minDistance = distance;
-                    end
-                end
-                
-                
-                if(loop && minDistance < .13)
-                    count = count + 1;
-                end
-                distances(1, a) = minDistance;
-                minDistance
-
+            % projectedTime = actualTime;
+            
+            %Find the paramaters of the threat when the interceptor is
+            %projected to launch
+            lastKnownI = fix(projectedTime / dt) + i;
+            lastKnownTime = fix(projectedTime / dt) * dt;
+            tInterval = 0:0.001:projectedTime - lastKnownTime;
+            if length(tInterval) > 1
+                paths = getPaths(tInterval, threat(lastKnownI,3), threat(lastKnownI,4), threat(lastKnownI,1), threat(lastKnownI,2));
+                launchDetails = paths.threat(end, :);
+            else
+                launchDetails = threat(lastKnownI,:);
             end
             
-            if(loop)
+            %Check if they would actually intersect
+            tInterval = 0:0.001:10;
+            paths = getPaths(tInterval, launchDetails(3), launchDetails(4), launchDetails(1), launchDetails(2));
+            minDistance = Inf;
+            for j = 1:length(tInterval)
+                distance = sqrt((paths.threat(j,3)-paths.interceptor(j,3))^2 + ...
+                    (paths.threat(j,4)-paths.interceptor(j,4))^2);
+                if(distance < minDistance)
+                    minDistance = distance;
+                end
+            end
+            minDistance
+
+            
+            if(loop && minDistance < .13)
+                count = count + 1;
                 count / a
             end
-            
+            distances(1, a) = minDistance;
             break
             
         end
@@ -148,8 +147,8 @@ for a = 1:100
             t = t(1:i);
             plot(t,vz_filtered - vz_truth','-r','linewidth',1)
             hold on
-            plot(t, z_filtered - z_truth');
-
+            %plot(t,vx_filtered - vx_truth','-b','linewidth',1)
+            
             hold on
             firstParts = x_filtered(1, 1:length(x_filtered) - 1);
             secondParts = x_filtered(1, 2:length(x_filtered));
@@ -157,11 +156,11 @@ for a = 1:100
             vs = vs./dt;
             vx_truth(1,:) = [];
             t = t(2:i);
-            %plot(t, vs' - vx_truth);
-            legend('Difference in model vzs','Difference in model zs')
+            plot(t, vs' - vx_truth);
+            legend('Difference in model vzs','Finite diffs')
             
         end
-
+        
         
     end
     

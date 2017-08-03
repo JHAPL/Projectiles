@@ -19,6 +19,10 @@ global sigmaX sigmaZ;
 global initialVXThreat initialVZThreat;
 global Q;
 
+global interceptorParams;
+global density;
+global gravity;
+
 if(first)
     
     %Simulated camera error for measurements
@@ -60,6 +64,23 @@ else
     %Kalman filter
     %Get the state transformation matrix
     F = getFMatrix(dt);
+    
+    %Control matrix accounting for drag
+    
+    mass = interceptorParams.mass;
+    crossSectionalArea = interceptorParams.area;
+    coefficentOfDrag = interceptorParams.drag;
+    c = crossSectionalArea * coefficentOfDrag * density / 2; %Calculation of
+    speed = sqrt(thetaLast(2)^2 + thetaLast(5)^2);
+    dragAcceleration = -c * speed ^ 2 / mass;
+    
+    u1 = [0, dragAcceleration * thetaLast(2) / speed ,0,0,dragAcceleration * thetaLast(5) / speed ,0];
+    
+    v = [thetaLast(2), thetaLast(5)];
+    a = [thetaLast(3), thetaLast(6)];
+    dragAccel = -c * (dot(v,a) * v / speed + speed * a);
+    u2 = [0,0,dragAccel(1),0,0,dragAccel(2)];
+    
     %Predict new state values
     thetaPrediction = F * thetaLast;
     %Predict new variance values

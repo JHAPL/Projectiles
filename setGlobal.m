@@ -13,15 +13,15 @@ initialVZInterceptor = 15 * cos(pi/4);
 
 %Process error matrix
 global sigmaX sigmaZ Q;
-sigmaX = .1; %When you change this change Q as well. Actually not sure of this
-sigmaZ = .1;
-Q =  .001 * diag(ones(6, 1)); %.01 a good value for 0.5/0.4
+sigmaX = .0001; %When you change this change Q as well. Actually not sure of this
+sigmaZ = .0001;
+Q =  .01 * diag(ones(6, 1)); %.01 a good value for 0.5/0.4
 %Q =  100000 * (ones(6, 6)); %.01 a good value for 0.5/0.4
 
 %If estimated time until launch is less than this, stop camera measurments
 %and commence better estimates and launch
 global timeThreshhold;
-timeThreshhold = 0.3;
+timeThreshhold = -10;
 
 
 
@@ -29,13 +29,13 @@ timeThreshhold = 0.3;
 global threatParams;
 threatParams.mass = 1.134;
 threatParams.area = 0.05067;
-threatParams.drag = 0.47;
+threatParams.drag = 0.2;
 
 %Define parameters for interceptor initial conditions and structure
 global interceptorParams interceptorIC;
 interceptorParams.mass = 0.0427;
 interceptorParams.area = 0.0025652;
-interceptorParams.drag = 0.47;
+interceptorParams.drag = 0.2;
 interceptorIC = [initialVXInterceptor,initialVZInterceptor,initialXInterceptor,initialZInterceptor];
 
 %Physical constants
