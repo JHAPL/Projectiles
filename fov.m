@@ -9,14 +9,14 @@ thetaY=36.7488 * pi /180;
 
 %angle of camera tilted up and to sides.. RADIANS
 %NOTE: variables to change
-cameraAngleUp = thetaY / 2;
-cameraAngleInward = pi / 15; 
+cameraAngleUp = pi / 10;
+cameraAngleInward = pi / 180 * 20; 
 
 %NOTE: test different numbers (to change), in meters
-disOffGround=0;
-camX = 2;
-yOffset = 0.5;
-fovLineLength=25;
+disOffGround= 0.25;
+camX = -1;
+yOffset = 1.5;
+fovLineLength=20;
 
 %dimensions of camera
 height=.1129;
@@ -75,7 +75,7 @@ fill3(pointsL(1:3, 1), pointsL(1:3, 2), pointsL(1:3, 3), 0.5);
 fill3(pointsL([1,2,4], 1), pointsL([1,2,4], 2), pointsL([1,2,4], 3), 0.5);
 fill3(pointsL([1,3,5], 1), pointsL([1,3,5], 2), pointsL([1,3,5], 3), 0.5);
 fill3(pointsL([1,4,5], 1), pointsL([1,4,5], 2), pointsL([1,4,5], 3), 0.5);
-fill3(pointsR([2,3,5,4], 1), pointsR([2,3,5,4], 2), pointsR([2,3,5,4], 3), 0.5);
+fill3(pointsL([2,3,5,4], 1), pointsL([2,3,5,4], 2), pointsL([2,3,5,4], 3), 0.5);
 alpha(0.2)
 
 % plot3([camX, (topLeftL(1) + topRightL(1)) / 2], [0, 0], [disOffGround, topLeftL(3)]);
@@ -83,4 +83,4 @@ alpha(0.2)
 % xMin = -20;
 % disp(xMax - xMin)
 
-text(0,10,10, char(strcat('Angle Up: ', num2str(cameraAngleUp / pi * 180), " degrees, Angle In: ", num2str(cameraAngleInward / pi * 180), ' degrees')));
+%text(0,10,10, char(strcat('Angle Up: ', num2str(cameraAngleUp / pi * 180), " degrees, Angle In: ", num2str(cameraAngleInward / pi * 180), ' degrees')));
