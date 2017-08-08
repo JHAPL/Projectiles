@@ -12,16 +12,18 @@ initialVXInterceptor = -15 * sin(pi/4);
 initialVZInterceptor = 15 * cos(pi/4);
 
 %Process error matrix
-global sigmaX sigmaZ Q;
-sigmaX = .0001; %When you change this change Q as well. Actually not sure of this
-sigmaZ = .0001;
-Q =  .01 * diag(ones(6, 1)); %.01 a good value for 0.5/0.4
+global sigmaX sigmaZ a_sigma Sw;
+sigmaX = .1; %When you change this change Q as well. Actually not sure of this
+sigmaZ = .1;
+%Q =  .1 * diag(ones(6, 1)); %.01 a good value for 0.5/0.4
 %Q =  100000 * (ones(6, 6)); %.01 a good value for 0.5/0.4
+a_sigma = .5;
+Sw = a_sigma ^ 2 / 25;
 
 %If estimated time until launch is less than this, stop camera measurments
 %and commence better estimates and launch
 global timeThreshhold;
-timeThreshhold = -10;
+timeThreshhold = 0.2;
 
 
 

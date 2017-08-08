@@ -1,13 +1,13 @@
-function estimate = kfilter(first, x, z, dt)
+function estimate = kfilter(first, x, z, dt, dim)
 
 %%% ============================== Inputs ============================= %%%
-% first - A boolean on whether it is the first time 
+% first - A boolean on whether it is the first time
 % the kalman filter is being run
 % x - The measured x position
 % z - The measured z position
 % dt - The amount of time between this measurment and the last one
 %%% ============================= Outputs ============================= %%%
-% estimate - A structure containing 2 fields: time, the estimated amount of time until 
+% estimate - A structure containing 2 fields: time, the estimated amount of time until
 % launch from the most recent measurement, and theta, the array containing
 % the current estimate of the state (x, Vx, Ax, z, Vz, Az).
 
@@ -17,11 +17,13 @@ persistent R H;
 
 global sigmaX sigmaZ;
 global initialVXThreat initialVZThreat;
-global Q;
 
 global interceptorParams;
 global density;
 global gravity;
+global a_sigma;
+global Sw
+
 
 if(first)
     
@@ -31,56 +33,72 @@ if(first)
     R(1, 1) = sigmaX^2;
     R(2, 2) = sigmaZ^2;
     
-    %Measurement matrix
-    H = [1, 0, 0, 0, 0, 0; 0, 0, 0, 1, 0, 0];
-    
+    if(dim == 6)
+        H = [1, 0, 0, 0, 0, 0; 0, 0, 0, 1, 0, 0];
+    end
+    if(dim == 4)
+        H = [1, 0, 0, 0; 0, 0, 1, 0];
+    end
     
     %Initial guesses for position, velocity, and acceleration (meters based)
-    startX = x;
-    startVX = initialVXThreat;
-    startAX = 0;
-    startZ = z;
-    startVZ = initialVZThreat;
-    startAZ = -9.8;
-    %Create a matrix to represent all initial values
-    thetaLast = [startX; startVX; startAX; startZ; startVZ; startAZ];
+    thetaLast = zeros(dim, 1);
+    thetaLast(1) = x;
+    thetaLast(2) = initialVXThreat;
+    thetaLast(dim / 2 + 1) = z;
+    thetaLast(dim / 2 + 2) = initialVZThreat;
+    
+    if(dim == 6)
+        thetaLast(6) = -9.8;
+    end
+    
+    
     %Initial variance matrix
-    pLast = zeros(6, 6);
+    pLast = zeros(dim);
     % pLast = 10^2*diag(ones(6,1));
-    pLast(1,1) = sigmaX^2;
-    pLast(2,2) = 5^2;
-    pLast(3,3) = 3^2;
-    pLast(4,4) = sigmaZ^2;
-    pLast(5,5) = 5^2;
-    pLast(6,6) = 3^2;
+    if(dim == 6)
+        pLast(1,1) = sigmaX^2;
+        pLast(2,2) = 5^2;
+        pLast(3,3) = 3^2;
+        pLast(4,4) = sigmaZ^2;
+        pLast(5,5) = 5^2;
+        pLast(6,6) = 3^2;
+    end
+    if(dim == 4)
+        pLast(1,1) = sigmaX^2;
+        pLast(2,2) = 2*sigmaX^2/dt;
+        pLast(3,3) = sigmaZ^2;
+        pLast(4,4) = 2*sigmaZ^2/dt;
+        
+    end
     
     estimate.time = Inf;
     estimate.theta = thetaLast;
-
+    
 else
-   
+    
     %Get the measured values, will be changed to take camera input later
     measurement = [x ; z];
     %Kalman filter
     %Get the state transformation matrix
-    F = getFMatrix(dt);
     
-    %Control matrix accounting for drag
     
-    mass = interceptorParams.mass;
-    crossSectionalArea = interceptorParams.area;
-    coefficentOfDrag = interceptorParams.drag;
-    c = crossSectionalArea * coefficentOfDrag * density / 2; %Calculation of
-    speed = sqrt(thetaLast(2)^2 + thetaLast(5)^2);
-    dragAcceleration = -c * speed ^ 2 / mass;
+    if(dim == 4)
+        F = getFMatrix4(dt);
+        M = [dt^3/3 dt^2/2; dt^2/2 dt];
+        Q = a_sigma^2*blkdiag(M,M);
+        
+    end
     
-    u1 = [0, dragAcceleration * thetaLast(2) / speed ,0,0,dragAcceleration * thetaLast(5) / speed ,0];
+    if(dim == 6)
+        F = getFMatrix6(dt);
+        M = [dt^5 / 20, dt^4 / 8, dt^3 / 6;
+            dt^4/8, dt^3 / 3, dt^2 / 2;
+            dt^3 / 6, dt^2 / 2, dt];
+        Q = Sw*blkdiag(M,M);
+        %Q = 0.1 * eye(6);
+    end
     
-    v = [thetaLast(2), thetaLast(5)];
-    a = [thetaLast(3), thetaLast(6)];
-    dragAccel = -c * (dot(v,a) * v / speed + speed * a);
-    u2 = [0,0,dragAccel(1),0,0,dragAccel(2)];
-    
+  
     %Predict new state values
     thetaPrediction = F * thetaLast;
     %Predict new variance values
@@ -95,23 +113,23 @@ else
     %Find new predicted values of theta
     thetaLast = thetaPrediction + K * residual;
     %Find new predicted covariance values
-    pLast = (eye(6) - K*H)*pPrediction;
+    pLast = (eye(dim) - K*H)*pPrediction;
     
     %Gets the estimate for how long until launch
     estimate.theta = thetaLast;
-    estimate.time = getTimeEstimate(thetaLast);
+    estimate.time = getTimeEstimate(thetaLast, dim);
     
 end
 end
 
 
-function time = getTimeEstimate(theta)
+function time = getTimeEstimate(theta, dim)
 global initialXInterceptor initialZInterceptor initialVXInterceptor initialVZInterceptor;
 g = 9.8;
 xThreat = theta(1);
-zThreat = theta(4);
+zThreat = theta(dim / 2 + 1);
 vXThreat = theta(2);
-vZThreat = theta(5);
+vZThreat = theta(dim / 2 + 2);
 
 a = vXThreat;
 b = xThreat;
@@ -147,9 +165,19 @@ time = tThreat - tInterceptor;
 end
 %This method retrieves the state transformation matrix for given time
 %difference
-function F = getFMatrix(dt)
+function F = getFMatrix6(dt)
 
 F = [1, dt, .5 * dt^2, 0, 0, 0; 0, 1, dt, 0, 0, 0; 0, 0, 1, 0, 0, 0;
     0, 0, 0, 1, dt, .5 * dt^2; 0, 0, 0, 0, 1, dt; 0, 0, 0, 0, 0, 1];
+
+end
+
+
+function F = getFMatrix4(dt)
+
+F = [1, dt,  0,  0; 
+     0,  1,  0,  0; 
+     0,  0,  1, dt; 
+     0,  0,  0,  1];
 
 end
