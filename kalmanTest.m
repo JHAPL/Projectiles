@@ -1,39 +1,41 @@
 setup();
-global initialXThreat initialZThreat initialVXThreat initialVZThreat;
-global timeThreshhold;
 
-%If looping, number of times there was a success
-count = 0;
-dim = 6;
+global initialXThreat initialZThreat initialVXThreat initialVZThreat;
+global timeThreshhold sigmaX sigmaZ;
+
+%Loop variables
+range = 0.01:0.01:3;
+numTimes = 200;
 
 %Options
-loop = true;
+loop = false;
 activateSolenoid = false;
 debugging = false;
+makeMovie = false;
 
-plots = ~loop;
-ratios = zeros(1, 100);
+plots = ~loop && ~makeMovie;
+ratios = zeros(1, length(range));
+
+
+%Change in time between pictures (represents ideal frames/second and update rate)
+dt = 1/25;
+maxTime = 2.56;
 
 
 global a_sigma Sw;
 
-for c = 0.1:.1:10
-    c / 0.1
+for c = range
     if(loop)
+        c / range(1)
         a_sigma = c;
         Sw = a_sigma ^ 2 / 25;
         count = 0;
     end
-    for a = 1:100
+    for a = 1:numTimes
         
-        %Change in time between pictures (represents ideal frames/second and update rate)
-        dt = 1/25;
         %Total time
-        t = 0:dt:10;
-        
-        
-        %TODO: ESTIMATE DRAG COEEFICIANTS
-        
+        t = 0:dt:maxTime;
+                
         
         %find the ideal paths of the target and interceptor (only target is used)
         path = getPaths(t, initialXThreat, initialZThreat, initialVXThreat, initialVZThreat);
@@ -41,7 +43,7 @@ for c = 0.1:.1:10
         threat(1,:) = [];
         t(:,1) = [];
         
-        kfilter(true, initialXThreat,initialZThreat,dt, dim);
+        kfilter(true, initialXThreat,initialZThreat,dt);
         
         x_filtered = zeros(size(t));
         z_filtered = zeros(size(t));
@@ -55,6 +57,8 @@ for c = 0.1:.1:10
         vx_truth = threat(:,1);
         vz_truth = threat(:,2);
         
+        frames(1) = getframe;
+        
         
         for i = 1:length(t)
             tic;
@@ -63,7 +67,7 @@ for c = 0.1:.1:10
             x = realX + randn(1) * sigmaX;
             z = realZ + randn(1) * sigmaZ;
             
-            estimate = kfilter(false,x,z,dt, dim);
+            estimate = kfilter(false,x,z,dt);
             time = estimate.time;
             theta = estimate.theta;
             
@@ -75,10 +79,22 @@ for c = 0.1:.1:10
             vx_filtered(i) = theta(2);
             vz_filtered(i) = theta(dim / 2 + 2);
             
-            if time < timeThreshhold && i > 3
+            
+            if(makeMovie)
+                plot(x_measured(i),z_measured(i),'bo')
+                hold on
+                plot(x_truth(i),z_truth(i),'-g','linewidth',1)
+                plot(x_filtered(i),z_filtered(i),'-*r','linewidth',1)
+                xlim([-20,0])
+                ylim([0,10])
+                
+                frames(i) = getframe;
+            end
+            
+            if time < timeThreshhold && z_filtered(i) > 5
                 %Time to launch
                 projectedTime = trajectorymodel(theta(1), theta(dim / 2 + 1), theta(2), theta(dim / 2 + 2),plots && ~debugging);
-                %actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), plots && ~debugging);
+                actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), plots && ~debugging);
                 %projectedTime = actualTime;
                 
                 if(projectedTime < 0 || projectedTime == Inf)
@@ -92,7 +108,6 @@ for c = 0.1:.1:10
                     break;
                 end
                 
-                % projectedTime = actualTime;
                 
                 %Find the paramaters of the threat when the interceptor is
                 %projected to launch
@@ -107,10 +122,10 @@ for c = 0.1:.1:10
                 end
                 
                 %Check if they would actually intersect
-                tInterval = 0:0.001:10;
-                paths = getPaths(tInterval, launchDetails(3), launchDetails(4), launchDetails(1), launchDetails(2));
+                global interceptorTime;
+                paths = getPaths(interceptorTime, launchDetails(3), launchDetails(4), launchDetails(1), launchDetails(2));
                 minDistance = Inf;
-                for j = 1:length(tInterval)
+                for j = 1:length(interceptorTime)
                     distance = sqrt((paths.threat(j,3)-paths.interceptor(j,3))^2 + ...
                         (paths.threat(j,4)-paths.interceptor(j,4))^2);
                     if(distance < minDistance)
@@ -121,6 +136,10 @@ for c = 0.1:.1:10
                 if(loop && minDistance < .13)
                     count = count + 1;
                 end
+                if(~loop)
+                    disp(minDistance)
+                end
+                
                 break
                 
             end
@@ -148,7 +167,7 @@ for c = 0.1:.1:10
                 plot(x_filtered,z_filtered,'-*r','linewidth',2)
                 legend('Interceptor','Projected Threat')
                 xlim([-20,0])
-                ylim([0,20])
+                ylim([0,10])
             else
                 t = t(1:i);
                 plot(t,vz_filtered - vz_truth','-r','linewidth',1)
@@ -179,7 +198,9 @@ for c = 0.1:.1:10
         break;
     else
         ratio = count / a;
-        ratios(1, round(c * 10)) = ratio;
+        ratios(1, round(c / range(1))) = ratio;
     end
 end
-
+if(makeMovie)
+    frames = frames(1:i);
+end

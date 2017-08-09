@@ -20,7 +20,7 @@ threatIC = [startingVX,startingVZ, startingX, startingZ];
 
 %Differential equations solver calculates the X velocities, Z velocities,
 %X position, and Z position. Stored in an array 'Y'
-[tInterceptor,YInterceptor] = ode45(@(t,Y) trajectory(t,Y,interceptorParams), time, interceptorIC);
+global YInterceptor;
 [tThreat,YThreat] = ode45(@(t,Y) trajectory(t,Y,threatParams), time, threatIC);
 
 
