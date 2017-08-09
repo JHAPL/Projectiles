@@ -14,8 +14,8 @@ initialVZInterceptor = 15 * cos(pi/4);
 
 %Process error matrix
 global sigmaX sigmaZ a_sigma Sw;
-sigmaX = 0.1;
-sigmaZ = 0.1;
+sigmaX = .2;
+sigmaZ = .2;
 a_sigma = 0.5;
 Sw = a_sigma ^ 2 / 25;
 
@@ -54,8 +54,6 @@ pathTimeStep = 0.01;
 interceptorTime = 0:pathTimeStep:(5 - pathTimeStep);
 global tInterceptor YInterceptor;
 [tInterceptor, YInterceptor] = ode45(@(t,Y) trajectory(t,Y,interceptorParams), interceptorTime, interceptorIC);
-
-
 
 end
 

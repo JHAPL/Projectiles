@@ -35,7 +35,7 @@ for c = range
         
         %Total time
         t = 0:dt:maxTime;
-                
+        
         
         %find the ideal paths of the target and interceptor (only target is used)
         path = getPaths(t, initialXThreat, initialZThreat, initialVXThreat, initialVZThreat);
@@ -72,29 +72,35 @@ for c = range
             theta = estimate.theta;
             
             x_filtered(i) = theta(1);
-            z_filtered(i) = theta(dim / 2 + 1);
+            z_filtered(i) = theta(4);
             x_measured(i) = x;
             z_measured(i) = z;
             
             vx_filtered(i) = theta(2);
-            vz_filtered(i) = theta(dim / 2 + 2);
+            vz_filtered(i) = theta(5);
             
             
             if(makeMovie)
-                plot(x_measured(i),z_measured(i),'bo')
+                plot(x_measured(1:i),z_measured(1:i),'bo')
                 hold on
-                plot(x_truth(i),z_truth(i),'-g','linewidth',1)
-                plot(x_filtered(i),z_filtered(i),'-*r','linewidth',1)
+                plot(x_truth(1:i),z_truth(1:i),'-g','linewidth',3)
+                plot(x_filtered(1:i),z_filtered(1:i),'-*r','linewidth',1)
+                %projectedTime = trajectorymodel(theta(1), theta(4), theta(2), theta(5),true);
+                %actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), true);
+
                 xlim([-20,0])
                 ylim([0,10])
                 
                 frames(i) = getframe;
+                hold off
             end
             
             if time < timeThreshhold && z_filtered(i) > 5
                 %Time to launch
-                projectedTime = trajectorymodel(theta(1), theta(dim / 2 + 1), theta(2), theta(dim / 2 + 2),plots && ~debugging);
-                actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), plots && ~debugging);
+                tic
+                projectedTime = trajectorymodel(theta(1), theta(4), theta(2), theta(5),plots && ~debugging);
+                toc
+                %actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), plots && ~debugging);
                 %projectedTime = actualTime;
                 
                 if(projectedTime < 0 || projectedTime == Inf)

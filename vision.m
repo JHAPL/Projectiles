@@ -1,6 +1,7 @@
 %% test
 clear
 clc
+setup();
 %%
 % assigining the camera a value
 camR = webcam(1);
@@ -11,7 +12,7 @@ camL.Resolution = '352x288';
 
 setup();
 global timeThreshhold;
-testingKalman = false;
+testingKalman = true;
 
 lastPicture = tic;
 first = true;
@@ -37,7 +38,7 @@ while(true)
             end
             
             if (estimate.time < timeThreshhold)
-                projectedTime = trajectorymodel(theta(1), theta(4), theta(2), theta(5),plots && ~debugging);
+                projectedTime = trajectorymodel(theta(1), theta(4), theta(2), theta(5), false);
                 if(projectedTime < 0 || projectedTime == Inf)
                     disp("Invalid Time Estimate");
                     break;

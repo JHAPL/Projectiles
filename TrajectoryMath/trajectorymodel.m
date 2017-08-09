@@ -88,5 +88,5 @@ if(makePlots)
     title('Kickball ICBM VS. Raquetball SAM');
     xlabel('X Position in Meters');
     ylabel('Y Position in Meters');
-    legend('Interceptor', 'Target');
+    %legend('Interceptor', 'Target');
 end
