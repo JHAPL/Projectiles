@@ -50,13 +50,11 @@ while(true)
             for i = 1:length(threatPath)
                 if(threatPath(4) < 0) 
                     disp(threatPath(3));
-                    endLoop = true;
                     break;
                 end
             end
             
-            if(endLoop)
-                break;
-            end    
+            break;
+ 
     end
 end
