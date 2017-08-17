@@ -9,8 +9,8 @@ initialVZThreat = 15 * sin(pi / 3);
 global initialXInterceptor initialZInterceptor initialVXInterceptor initialVZInterceptor;
 initialXInterceptor = 0;
 initialZInterceptor = 1.14 + 0.28;
-initialVXInterceptor = -13 * sin(pi/4);
-initialVZInterceptor = 13 * cos(pi/4);
+initialVXInterceptor = -15 * sin(pi/4);
+initialVZInterceptor = 15 * cos(pi/4);
 
 %Process error matrix
 global sigmaX sigmaZ a_sigma Sw;

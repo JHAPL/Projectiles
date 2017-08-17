@@ -210,3 +210,12 @@ end
 if(makeMovie)
     frames = frames(1:i);
 end
+
+inter = paths.interceptor;
+for i = 1:length(inter)
+   if(inter(i, 4) < 0)
+       inter(i, 3)
+       break;
+   end
+end
+
