@@ -87,9 +87,9 @@ for c = range
                 plot(x_filtered(1:i),z_filtered(1:i),'-*r','linewidth',1)
                 %projectedTime = trajectorymodel(theta(1), theta(4), theta(2), theta(5),true);
                 %actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), true);
-
-                xlim([-20,0])
-                ylim([0,10])
+                
+                xlim([-25,0])
+                ylim([0,25])
                 
                 frames(i) = getframe;
                 hold off
@@ -100,7 +100,7 @@ for c = range
                 tic
                 projectedTime = trajectorymodel(theta(1), theta(4), theta(2), theta(5),plots && ~debugging);
                 toc
-                %actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), plots && ~debugging);
+                actualTime = trajectorymodel(threat(i,3), threat(i,4), threat(i,1), threat(i,2), plots && ~debugging);
                 %projectedTime = actualTime;
                 
                 if(projectedTime < 0 || projectedTime == Inf)
@@ -172,8 +172,8 @@ for c = range
                 plot(x_truth,z_truth,'-g','linewidth',1)
                 plot(x_filtered,z_filtered,'-*r','linewidth',2)
                 legend('Interceptor','Projected Threat')
-                xlim([-20,0])
-                ylim([0,10])
+                xlim([-25,0])
+                ylim([0,25])
             else
                 t = t(1:i);
                 plot(t,vz_filtered - vz_truth','-r','linewidth',1)

@@ -14,20 +14,19 @@ cameraAngleInward = pi / 180 * 20;
 
 %NOTE: test different numbers (to change), in meters
 disOffGround= 0.25;
-camX = -1;
+camX = 2;
 yOffset = 1.5;
-fovLineLength=20;
+fovLineLength=23;
 
 %dimensions of camera
 height=.1129;
 width=.1158;
 
 global initialXThreat initialZThreat initialVXThreat initialVZThreat;
+global interceptorTime;
 
 
-%Get paths
-time = 0:.01:9.99;
-paths = getPaths(time, initialXThreat, initialZThreat, initialVXThreat, initialVZThreat);
+paths = getPaths(interceptorTime, initialXThreat, initialZThreat, initialVXThreat, initialVZThreat);
 YInterceptor = paths.interceptor;
 YThreat = paths.threat;
 
@@ -36,9 +35,9 @@ interceptorPath = [YInterceptor(:,3), YInterceptor(:,4)];
 threatPath = [YThreat(:,3), YThreat(:,4)];
 
 %plot the target and interceptor
-plot3(YInterceptor(:,3), zeros(4,1000), YInterceptor(:,4)); grid on
+plot3(YInterceptor(:,3), zeros(4,length(interceptorTime)), YInterceptor(:,4), 'LineWidth', 4); grid on
 hold on
-plot3(YThreat(:,3), zeros(4,1000), YThreat(:,4)); grid on
+plot3(YThreat(:,3), zeros(4,length(interceptorTime)), YThreat(:,4), 'LineWidth', 4); grid on
 
 xlim([-30, 10]);
 ylim([-15, 15]);
